@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const navLink = [
   {
@@ -21,6 +21,7 @@ const navLink = [
 ];
 
 const LandingNavbar = () => {
+  const navigate = useNavigate();
 
   return (
     <nav className="absolute text-white z-[999] flex justify-between items-center px-16 w-full">
@@ -42,33 +43,23 @@ const LandingNavbar = () => {
           </li>
         ))}
       </ul>
-      {/* <Button.Group>
-        {!token && !id ? (
-          <Button
-            onClick={() => {
-              navigate("/login");
-            }}
-          >
-            Login
-          </Button>
-        ) : (
-          <Button
-            onClick={() => {
-              navigate("/dashboard");
-            }}
-          >
-            Dashboard
-          </Button>
-        )}
-        <Button variant="ghost" onClick={handleNavItemClick}>
+
+      <div className="flex items-center gap-5">
+        <Button
+          className="hover:border border-slate-200 transition-all delay-200 p-2 px-6"
+          onClick={() => navigate("/login")}
+        >
+          Login
+        </Button>
+
+        <Button
+          className="border border-slate-200 hover:bg-slate-200 hover:text-black p-2 px-6"
+        >
           Get in touch
         </Button>
-      </Button.Group> */}
-      <Button
-        className="border border-slate-200 hover:bg-slate-200 hover:text-black p-2 px-6"
-      >
-        Get in touch
-      </Button>
+
+      
+      </div>
     </nav>
   );
 };
