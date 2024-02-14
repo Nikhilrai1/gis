@@ -5,13 +5,15 @@ import SearchFilter from "@/components/table/pagination-table/utils/SearchFilter
 import Pagination from "@/components/table/pagination-table/utils/Pagination";
 import { toast } from "react-toastify";
 import { TableLayout } from "@/components/table/pagination-table/utils/TableLayout";
-import { useDeleteGisFileMutation, useGetAllGisFileQuery } from "@/redux/features/gis-data/gisApi";
+import { useDeleteGisFileMutation, useGetAllGisFileQuery, useLazyGetSingleGisFileJsonQuery } from "@/redux/features/gis-data/gisApi";
 import { FaCheck } from "react-icons/fa";
 import TableHeader from "../table/pagination-table/utils/TableHeader";
 import GisFileUpload from "./GisFileUpload";
 import ConfirmPopup from "../popup/ConfirmPopupModal";
 import { showToast } from "@/lib/Toast";
 import { ErrorPayload } from "@/typing";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { GisData, initGisFileData } from "@/redux/features/gis-data/gisDataSlice";
 
 
 const GisDataList = () => {
@@ -20,11 +22,14 @@ const GisDataList = () => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
     const [selectedGisDataId, setSelectedGisDataId] = useState<string>("");
+    const { gisData: currGisData } = useAppSelector(state => state?.gis);
+    const [getGisFileJson, { isLoading: fetchGisJsonLoading, isFetching: fetchingGisJson }] = useLazyGetSingleGisFileJsonQuery();
     const [searchParams, setSearchParams] = useState({
         currentPage: 1,
         perPage: 5,
         search: "",
     })
+    const dispatch = useAppDispatch();
 
     // api
     const { data, isLoading: getLoading } = useGetAllGisFileQuery({
@@ -34,6 +39,7 @@ const GisDataList = () => {
             search: searchParams.search
         }
     });
+
     const [deleteGisData, { isLoading: deleteLoading, isSuccess: deleteSuccess }] = useDeleteGisFileMutation();
 
     // utill function
@@ -64,6 +70,24 @@ const GisDataList = () => {
                 })
             })
         })
+    }
+
+    const onGisFileSwitch = (gisData: GisData) => {
+        getGisFileJson({ id: `${gisData?.id || ""}` })
+            .unwrap().then((data) => {
+                dispatch(initGisFileData({
+                    id: gisData?.id || "",
+                    name: gisData?.name || "",
+                    geojson: data?.results
+                }))
+            }).catch((err: ErrorPayload) => {
+                err?.data?.errors.map(el => {
+                    showToast(el.message, {
+                        type: "error",
+                    })
+                })
+            })
+
     }
 
     return (
@@ -101,7 +125,7 @@ const GisDataList = () => {
                 </div>
 
 
-                <TableLayout isLoading={getLoading || deleteLoading}>
+                <TableLayout isLoading={getLoading || deleteLoading || fetchGisJsonLoading || fetchingGisJson}>
                     <div className="bg-white shadow-md rounded" style={{ overflowX: "auto" }}>
                         <table className="min-w-max w-full">
                             <thead className='bg-theme'>
@@ -130,12 +154,10 @@ const GisDataList = () => {
 
                                         <td key={i} className="py-3 px-6 text-center">
                                             <div className="flex items-center justify-center gap-3">
-
                                                 <button
-                                                    // className={`p-[7px] text-white border bg-green-400`}
-                                                    className={`p-[7px] text-white border bg-gray-300`}
+                                                    className={`p-[7px] text-white border ${el?.id === currGisData?.id ? "bg-green-500" : "bg-gray-300"} hover:bg-gray-700`}
                                                     style={{ borderRadius: "5px" }}
-                                                    onClick={() => { }}
+                                                    onClick={() => onGisFileSwitch(el)}
                                                 >
                                                     <FaCheck color="white" size={15} />
                                                 </button>

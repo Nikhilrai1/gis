@@ -29,3 +29,31 @@ export interface GisAllFileResponseI {
   total_pages: number;
   results: GisFileI[];
 }
+
+
+interface GetAllGeoJson {
+  current_page: number;
+  total: number;
+  per_page: number;
+  total_pages: number;
+  results: GisJson[];
+}
+
+export interface GisJson {
+  id: string;
+  type: string;
+  properties: Properties;
+  geometry: Geometry;
+}
+interface Geometry {
+  type: string;
+  coordinates: number[];
+}
+
+interface Properties {
+  _id: string;
+  rd_name: string;
+  ref_rd: string;
+  ward_no: string;
+}
+

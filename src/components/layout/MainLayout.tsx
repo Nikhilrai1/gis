@@ -7,7 +7,6 @@ import { InitialSelectGisDataModal } from "../modal/InitialSelectGisDataModal";
 
 export default function MainLayout() {
     const { gisData } = useAppSelector(state => state.gis);
-
     return (
         <main className="w-full font-sans">
             <div className='flex items-start w-full'>
@@ -21,7 +20,7 @@ export default function MainLayout() {
                     </div>
                 </div>
             </div>
-           {!gisData && <InitialSelectGisDataModal
+            {!gisData && <InitialSelectGisDataModal
                 title="Select Gis File"
                 showCancelButton={false}
                 className="max-w-[800px]"

@@ -7,6 +7,7 @@ import ProfileIcon from "./ProfileIcon";
 import { dashboardNavItems } from "./DashboardNavItems";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { logout } from "@/redux/features/auth/authSlice";
+import GisFileSwitcher from "@/components/gis/GisFileSwitcher";
 
 const AuthNavbar = () => {
     const navigate = useNavigate();
@@ -66,7 +67,7 @@ const AuthNavbar = () => {
                 />
             </Link>
             <div className="flex gap-8 items-center" ref={menuContainer}>
-                {/* <ActiveGisFile /> */}
+                <GisFileSwitcher />
                 <CgMenuGridO
                     size={50}
                     className="cursor-pointer p-2 rounded-full hover:bg-slate-700"

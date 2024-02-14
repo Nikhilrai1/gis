@@ -1,15 +1,15 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { GisJson } from "./gis";
 
 
 interface InitialGisData {
-    gisData: GisFile | null
+    gisData: GisData | null
 }
-interface GisFile {
-    id: number;
+export interface GisData {
+    id: number | string;
     name: string;
-    geojson?: any;
+    geojson?: GisJson[];
 }
-
 
 const initialState: InitialGisData = {
     gisData: null
@@ -19,12 +19,13 @@ export const gisDataSlice = createSlice({
     name: "gis",
     initialState,
     reducers: {
-        initGisFileData: (_, { }: PayloadAction<any>) => {
-            // localStorage.setItem("gis_auth_token", payload.data.access);
+        initGisFileData: (state, { payload }: PayloadAction<GisData>) => {
+            state.gisData = payload;
+            localStorage.setItem("selected_gis_file", JSON.stringify(payload));
         },
         removeGisFileData: (state) => {
-            // localStorage.setItem("gis_auth_token", payload.data.access);
             state.gisData = null;
+            localStorage.removeItem("selected_gis_file");
         },
     },
 });

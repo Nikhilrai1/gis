@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../redux/store";
+import { PageLoader } from "@/components/loader/PageLoader";
 
 export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { authenticated, noAuth } = useAppSelector((state) => state.auth);
@@ -12,5 +13,5 @@ export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     return <Navigate to={"/home"} />;
   }
 
-  return <p>Loading...</p>;
+  return <PageLoader />;
 };

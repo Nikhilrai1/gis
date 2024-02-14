@@ -1,6 +1,6 @@
 import { rootApi } from "@/redux/root.api";
 import { SearchParamsI } from "@/typing";
-import { GisAllFileResponseI, GisFileI, IGisPropertiesResponse } from "./gis";
+import { GetAllGeoJson, GisAllFileResponseI, IGisPropertiesResponse } from "./gis";
 
 
 export const gisApi = rootApi.injectEndpoints({
@@ -12,7 +12,7 @@ export const gisApi = rootApi.injectEndpoints({
             }),
             providesTags: ["gis-data"],
         }),
-        getSingleGisFile: builder.query<GisFileI, { id: string }>({
+        getSingleGisFileJson: builder.query<GetAllGeoJson, { id: string }>({
             query: ({ id }) => ({
                 url: `/gis-file-upload/${id}/`,
             }),
@@ -52,7 +52,7 @@ export const gisApi = rootApi.injectEndpoints({
 
 export const {
     useGetAllGisFileQuery,
-    useGetSingleGisFileQuery,
+    useLazyGetSingleGisFileJsonQuery,
     usePostGisFileMutation,
     useUpdateGisFileMutation,
     useDeleteGisFileMutation,

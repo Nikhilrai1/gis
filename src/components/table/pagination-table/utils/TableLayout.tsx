@@ -1,12 +1,12 @@
-import LoadingSpinner from '@/components/loader/LoadingSpiner';
+import BounceLoader from '@/components/loader/BounceLoader';
 import React from 'react'
 
 
 export const Loader = () => {
     return (
-        <div className='w-full h-[250px] flex items-center justify-center z-50 bg-[#dad4d4ed]'>
+        <div className='w-full h-[250px] flex items-center justify-center z-50 bg-[#f1ececed]'>
             <div>
-                <LoadingSpinner />
+                <BounceLoader />
             </div>
         </div>
     )
