@@ -9,7 +9,7 @@ export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   }
 
   if (!noAuth && !authenticated) {
-    return <Navigate to={"/login"} />;
+    return <Navigate to={"/home"} />;
   }
 
   return <p>Loading...</p>;

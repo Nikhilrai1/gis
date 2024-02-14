@@ -9,8 +9,9 @@ const App = () => {
   const pathname = window.location.pathname;
   const [verifyToken] = useVerifyTokenMutation();
 
+
   useEffect(() => {
-    const authToken = localStorage.getItem("ha_auth_token") || "";
+    const authToken = localStorage.getItem("gis_auth_token") || "";
 
     const verifyUserToken = async () => {
       await verifyToken({ token: authToken });
@@ -19,7 +20,7 @@ const App = () => {
     if (pathname !== "/login") {
       verifyUserToken();
     }
-  }, [verifyToken, pathname]);
+  }, [ pathname]);
 
   return <RouterProvider router={router} />;
 };

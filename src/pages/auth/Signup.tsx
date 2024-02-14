@@ -13,18 +13,16 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { MdArrowOutward } from "react-icons/md";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import AuthLayout from "@/components/layout/AuthLayout"
+import { useSignupMutation } from "@/redux/features/auth/authApi"
+import { showToast } from "@/lib/Toast"
 
 const formSchema = z.object({
   first_name: z.string(),
   last_name: z.string(),
   username: z.string(),
-  mobile_number: z.number().min(10,{
-    message: "Required 10 digit phone number",
-  }).max(10,{
-    message: "Required 10 digit phone number",
-  }),
+  mobile_number: z.string(),
   email: z.string(),
   password: z.string(),
   confirm_password: z.string()
@@ -45,11 +43,21 @@ const Signup = () => {
     },
   })
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  const navigate = useNavigate();
+  const [signupUser] = useSignupMutation();
+
+  // Define a submit handler.
+  async function onSubmit(values: FormSchemaType) {
+    await signupUser(values).unwrap().then(() => {
+      showToast("User Register Successfully.",{type: "success"});
+      navigate("/login");
+    }).catch((err: AuthPayloadError) => {
+      err?.data?.errors.map(el => {
+        showToast(el.message, {
+          type: "error",
+        })
+      })
+    })
   }
   return (
     <AuthLayout title="Register to NepGIS">

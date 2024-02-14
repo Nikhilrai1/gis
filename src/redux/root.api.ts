@@ -1,13 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_API_URL } from "../utils/urlConfig";
-import { RootState } from "./store";
+import { BASE_API_URL } from "@/lib/urlConfig";
 
 export const rootApi = createApi({
   reducerPath: "root",
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_API_URL,
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.token;
+    prepareHeaders: (headers) => {
+      // const token = (getState() as RootState).auth.token;
+      const token = localStorage.getItem("gis_auth_token") || "";
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
@@ -16,17 +16,6 @@ export const rootApi = createApi({
   }),
   endpoints: () => ({}),
   tagTypes: [
-    "Subject",
-    "StudentCategory",
-    "StudentHouse",
-    "Student-Info",
-    "Guardian",
-    "Department",
-    "Designation",
-    "Staff",
-    "Grade",
-    "Class",
-    "SubjectGroup",
-    "Manage-Roll_Number"
+    "gis-data"
   ],
 });

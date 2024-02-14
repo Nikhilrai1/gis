@@ -9,15 +9,11 @@ import UpdateGisForm from "@/pages/protected/form/gis-form/UpdateGisForm";
 import InfoPage from "@/pages/protected/info/InfoPage";
 import MapPage from "@/pages/protected/map/MapPage";
 import TablePage from "@/pages/protected/table/TablePage";
-import { Navigate } from "react-router-dom";
 
 
 const ChildRoutes = [
   {
-    path: "/",
-    element: <Navigate to="/home" />,
-  },
-  {
+    index: true,
     path: "/dashboard",
     element: <Dashboard />,
   },

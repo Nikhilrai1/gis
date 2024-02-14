@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 interface InitialStateI {
   noAuth: boolean;
   authenticated: boolean;
-  authUser: any;
+  authUser: User | null;
   token: string | null;
 }
 
@@ -27,6 +27,12 @@ export const AuthSlice = createSlice({
       localStorage.setItem("gis_auth_token", payload.data.access);
     },
 
+    initVerifyUser: (state, { payload }: PayloadAction<VerifyUserPayload>) => {
+      state.noAuth = false;
+      state.authenticated = true;
+      state.authUser = payload.user;
+    },
+
     logout: (state) => {
       state.authUser = null;
       state.authenticated = false;
@@ -37,4 +43,4 @@ export const AuthSlice = createSlice({
   },
 });
 
-export const { initAuthUser, logout } = AuthSlice.actions;
+export const { initAuthUser, logout, initVerifyUser } = AuthSlice.actions;

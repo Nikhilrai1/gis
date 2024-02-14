@@ -13,8 +13,10 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { MdArrowOutward } from "react-icons/md";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import AuthLayout from "@/components/layout/AuthLayout"
+import { useLoginMutation } from "@/redux/features/auth/authApi"
+import { showToast } from "@/lib/Toast"
 
 const formSchema = z.object({
   username_or_phone: z.string(),
@@ -23,7 +25,10 @@ const formSchema = z.object({
 
 type FormSchemaType = z.infer<typeof formSchema>
 
+
 const Login = () => {
+  const navigate = useNavigate();
+  const [loginUser, { }] = useLoginMutation();
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,11 +37,20 @@ const Login = () => {
     },
   })
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  // Define a submit handler.
+  async function onSubmit(values: FormSchemaType) {
+    await loginUser(values).unwrap().then((data) => {
+      showToast(data?.Success || "", {
+        type: "success",
+      })
+      navigate("/dashboard");
+    }).catch((err: AuthPayloadError) => {
+      err?.data?.errors.map(el => {
+        showToast(el.message, {
+          type: "error",
+        })
+      })
+    })
   }
   return (
     <AuthLayout title="Login to NepGIS">
