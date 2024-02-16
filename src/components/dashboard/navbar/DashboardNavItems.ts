@@ -30,6 +30,6 @@ export const dashboardNavItems: NavMenuI[] = [
   {
     icon: BsFileText,
     name: "Forms",
-    path: "/forms",
+    path: "/form-templates",
   },
 ];

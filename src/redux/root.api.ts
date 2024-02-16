@@ -16,6 +16,7 @@ export const rootApi = createApi({
   }),
   endpoints: () => ({}),
   tagTypes: [
-    "gis-data"
+    "gis-data",
+    "gis-form-template"
   ],
 });

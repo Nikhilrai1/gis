@@ -1,6 +1,8 @@
+import EmptyFormTemplate from "@/components/form-template/EmptyFormTemplate";
 import ChartPage from "@/pages/protected/chart/ChartPage";
 import Dashboard from "@/pages/protected/dashboard/Dashboard";
 import CreateGisFormTemplate from "@/pages/protected/form/gis-form-template/CreateGisFormTemplate";
+import GisFormTemplates from "@/pages/protected/form/gis-form-template/GisFormTemplates";
 import UpdateGisFormTemplate from "@/pages/protected/form/gis-form-template/UpdateGisFormTemplate";
 import CreateGisForm from "@/pages/protected/form/gis-form/CreateGisForm";
 import GisFormDataList from "@/pages/protected/form/gis-form/GisFormDataList";
@@ -49,6 +51,15 @@ const ChildRoutes = [
   {
     path: "gis-forms/:id/update",
     element: <UpdateGisForm />,
+  },
+
+  {
+    path: "form-templates",
+    element: <GisFormTemplates />,
+  },
+  {
+    path: "no-form-templates",
+    element: <EmptyFormTemplate />,
   },
 
   {

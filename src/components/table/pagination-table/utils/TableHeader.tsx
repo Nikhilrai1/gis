@@ -22,7 +22,7 @@ const TableHeader = ({ title, subTitle, linkTitle, link, buttonName, buttonClick
                 </button>}
 
 
-                {linkTitle && <Link to={link as string} className='flex items-center justify-center text-white self-end p-2 bg-themeColor rounded-md bg-theme'>
+                {linkTitle && <Link to={link as string} className='flex items-center justify-center text-white self-end p-2 bg-themeColor rounded-md bg-primary-blue-900'>
                     {linkTitle}
                 </Link>
                 }

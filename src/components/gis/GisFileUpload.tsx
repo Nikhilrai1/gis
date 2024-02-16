@@ -17,6 +17,7 @@ import { ErrorPayload } from '@/typing'
 // validation
 const formSchema = z.object({
     name: z.string().min(3),
+    date: z.string()
 })
 
 type FormSchema = z.infer<typeof formSchema>
@@ -72,6 +73,20 @@ const GisFileUpload = ({ setModalOpen }: GisFileUploadProps) => {
                                 <FormLabel>File Name</FormLabel>
                                 <FormControl>
                                     <Input placeholder="File Name"  {...field} className=' focus:ring-0 placeholder:text-xs rounded-md px-5 border' />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="date"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Date</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="File Name" type='text'  {...field} className=' focus:ring-0 placeholder:text-xs rounded-md px-5 border' />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
