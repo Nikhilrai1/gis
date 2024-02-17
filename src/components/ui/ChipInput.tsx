@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { SelectTypeI } from "@/typing";
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -8,12 +9,13 @@ interface Chip {
 }
 
 interface ChipInputProps {
-  onChipAdd: (chip: string) => void;
+  onChipAdd?: (chip: string) => void;
   className?: string;
   placeholder?: string;
+  onChipChange?: (chips: { value: string }[]) => void;
 }
 
-const ChipInput: React.FC<ChipInputProps> = ({ onChipAdd, className, placeholder }) => {
+const ChipInput: React.FC<ChipInputProps> = ({ onChipAdd, className, placeholder, onChipChange }) => {
   const [inputValue, setInputValue] = useState("");
   const [chips, setChips] = useState<Chip[]>([]);
 
@@ -26,7 +28,9 @@ const ChipInput: React.FC<ChipInputProps> = ({ onChipAdd, className, placeholder
       const chip: Chip = { id: uuidv4(), value: inputValue.trim() };
       setChips([...chips, chip]);
       setInputValue("");
-      onChipAdd(inputValue.trim());
+      onChipAdd && onChipAdd(inputValue.trim());
+      const chipsData = [...chips, chip].map(el => ({ value: el?.value }));
+      onChipChange && onChipChange(chipsData);
     } else if (e.key === "Backspace" && inputValue === "") {
       // Remove the last chip when backspace is pressed and input is empty
       const lastChip = chips[chips.length - 1];
@@ -42,7 +46,7 @@ const ChipInput: React.FC<ChipInputProps> = ({ onChipAdd, className, placeholder
   };
 
   return (
-    <div className={cn(`flex flex-wrap gap-2 border border-gray-300 rounded p-2`,className)}>
+    <div className={cn(`flex flex-wrap gap-2 border border-gray-300 rounded p-2`, className)}>
       {chips.map((chip) => (
         <div
           key={chip.id}

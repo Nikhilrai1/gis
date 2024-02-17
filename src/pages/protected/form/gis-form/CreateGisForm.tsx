@@ -1,7 +1,8 @@
+import CreateGisFormFromTemplate from "@/components/gis/gis-form/CreateGisFormFromTemplate"
 
 const CreateGisForm = () => {
   return (
-    <div>CreateGisForm</div>
+    <CreateGisFormFromTemplate />
   )
 }
 

@@ -1,105 +1,101 @@
-import { DynamicFormFieldI } from "@/redux/features/gis-form-template/gis-form-template"
+import { DynamicFormFieldI } from "@/redux/features/gis-form-template/gis-form-template";
+import { v4 as uuidV4 } from "uuid";
+import { Plus, Trash } from 'lucide-react';
+import { SelectInput } from "@/components/ui/SelectInput";
+import ChipInput from "@/components/ui/ChipInput";
+import CustomCheckbox from "@/components/ui/CheckboxInput";
+import { SelectTypeI } from "@/typing";
+import { formFieldsOptions } from "@/utils/constants";
 
 interface FormFieldCreatorProps {
     formFields: DynamicFormFieldI[],
     setFormFields: (form: DynamicFormFieldI[]) => void;
 }
 
-const formFieldsOptions = [
-    { "label": "StringField", "value": "StringField" },
-    { "label": "IntegerField", "value": "IntegerField" },
-    { "label": "FloatField", "value": "FloatField" },
-    { "label": "BooleanField", "value": "BooleanField" },
-    { "label": "DateField", "value": "DateField" },
-    { "label": "DateTimeField", "value": "DateTimeField" },
-    { "label": "TimeField", "value": "TimeField" },
-    { "label": "DropDown", "value": "DropDown" }
-]
-
-
-import React from 'react'
-import { Plus, Trash } from 'lucide-react';
-import { v4 as uuidV4 } from "uuid";
-import { SelectInput } from "@/components/ui/SelectInput";
-import ChipInput from "@/components/ui/ChipInput";
-
-
 
 const FormFieldCreator = ({ formFields, setFormFields }: FormFieldCreatorProps) => {
-    console.log(formFields)
-    // const handleTableInputChange = (e: React.ChangeEvent<HTMLInputElement>, id: string, key: keyof BreakPeriod) => {
-    //     const newTableData = table.map(el => {
-    //         if (el?.id === id) {
-    //             const newData = {
-    //                 ...el,
-    //                 [key]: e.target.value,
-    //             }
-    //             return newData;
-    //         }
-    //         return el;
-    //     })
 
-    //     setTable(newTableData)
-    // }
+    const handleFormFieldChange = (value: string | boolean | SelectTypeI[], id: string, key: keyof DynamicFormFieldI) => {
+        const newTableData = formFields.map(el => {
+            if (el?.id === id) {
+                const newData = {
+                    ...el,
+                    [key]: value,
+                }
+                return newData;
+            }
+            return el;
+        })
 
+        setFormFields(newTableData)
+    }
 
+    const handleAddFormField = () => {
+        // @ts-ignore
+        setFormFields((prev: DynamicFormFieldI[]) => [
+            ...prev,
+            {
+                id: uuidV4(),
+                form_type: "StringField",
+                name: "",
+                required: false,
+                select_field: null
+            }])
+    }
 
-    // const handleAddBreakPeriod = () => {
-    //     //@ts-ignore
-    //     setTable((prev) => [
-    //         ...prev, {
-    //             id: uuidV4(),
-    //             period_no: "",
-    //             period_duration: "",
-    //         }]
-    //     )
-    // }
+    const handleDeleteFormField = (id: string) => {
+        const newTable = formFields?.filter(el => el.id !== id);
+        setFormFields(newTable)
+    }
 
-    // const handleDeleteBreakPeriod = (id: string) => {
-    //     const newTable = table?.filter(el => el.id !== id);
-    //     setTable(newTable)
-    // }
 
     return (
-        <div className='w-fit max-w-[400px]'>
-            <div>
+        <div className='w-full'>
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 w-full">
                 {formFields?.map((el, i) => (
-                    <div key={i} className="flex flex-col gap-2 border p-2 w-fit" >
-                        <div className="flex items-center gap-5 " >
-                            <div className='text-center border p-1.5 rounded-md'>
+                    <div key={i} className="flex flex-col gap-2 border rounded-xl bg-white p-2 w-full shadow-xl" >
+                        <div className="flex items-center gap-5 w-full" >
+                            <div className='text-center border p-1.5 rounded-md flex-1 flex flex-wrap'>
                                 <input
-                                    className='max-w-[200px] min-w-[200px] focus:outline-none'
+                                    className=' focus:outline-none'
                                     value={el.name}
                                     type='text'
                                     required={true}
-                                    onChange={(e) => {
-                                        { }
-                                    }}
+                                    onChange={(e) => handleFormFieldChange(e.target.value, el?.id as string, "name")}
                                 />
                             </div>
                             <div className='text-center  rounded-md'>
                                 <SelectInput
-                                    onSelect={() => { }}
+                                    onSelect={(option) => handleFormFieldChange(option?.value, el?.id as string, "form_type")}
                                     options={formFieldsOptions}
-                                    defaultValue={el?.name}
+                                    defaultValue={el?.form_type}
                                     placeholder="Select Field Type"
-                                    className="max-w-[200px] min-w-[200px] "
+                                    className=" "
                                 />
                             </div>
 
-                            {<div className='text-center p-1'>
+                            <div className='text-center p-1'>
                                 <button
+                                    // disabled={i === 0}
+                                    // className={`p-[7px] text-white ${i === 0 ? "bg-red-300" : "bg-red-500"}`}
                                     className={`p-[7px] text-white bg-red-500`}
                                     style={{ borderRadius: "5px" }}
-                                    onClick={() => { }}
+                                    onClick={() => handleDeleteFormField(el?.id as string)}
                                 >
                                     <Trash size={15} />
                                 </button>
                             </div>
-                            }
-                      
                         </div>
-                        <ChipInput onChipAdd={() => { }} className="w-full" placeholder="Add Options..." />
+                        {el?.form_type === "DropDown" &&
+                            <ChipInput
+                                onChipChange={(chipValue) => handleFormFieldChange(chipValue as SelectTypeI[], el?.id as string, "select_field")}
+                                className="w-full"
+                                placeholder="Add Options..."
+                            />}
+                        <CustomCheckbox
+                            label="Required"
+                            onCheck={(value) => handleFormFieldChange(value, el?.id as string, "required")}
+                        />
                     </div>
                 ))}
             </div>
@@ -107,7 +103,7 @@ const FormFieldCreator = ({ formFields, setFormFields }: FormFieldCreatorProps) 
                 <button
                     type='button'
                     className={`p-[7px] text-white bg-green-500 rounded-md`}
-                    onClick={() => { }}
+                    onClick={handleAddFormField}
                 >
                     <Plus size={15} />
                 </button>

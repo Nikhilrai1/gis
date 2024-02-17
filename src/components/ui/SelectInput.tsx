@@ -39,7 +39,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({ options, onSelect, cla
 
 
     const handleSelect = (currentValue: string) => {
-        const option = options.find(el => el.value === currentValue);
+        const option = options.find(el => el.value.toLowerCase() === currentValue.toLocaleLowerCase());
         if (option) {
             onSelect(option);
         }
@@ -59,7 +59,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({ options, onSelect, cla
                 >
                     {value
                         ? <p>
-                            {options.find((option) => option.value === value)?.label}
+                            {options.find((option) => option.value.toLocaleLowerCase() === value.toLowerCase())?.label}
                         </p>
                         : <p className="text-gray-500 text-xs">{placeholder}</p>}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

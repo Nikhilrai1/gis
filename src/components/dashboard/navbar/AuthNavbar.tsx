@@ -57,7 +57,7 @@ const AuthNavbar = () => {
 
     return (
         <nav
-            className={`relative h-[107px] text-white bg-primary-blue-900  z-[20] flex justify-between items-center p-7 w-full`}
+            className={`fixed top-0 left-0  h-[107px] text-white bg-primary-blue-900  z-[20] flex justify-between items-center p-7 w-full`}
         >
             <Link to="/home">
                 <img

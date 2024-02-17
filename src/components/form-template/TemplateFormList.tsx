@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Trash } from "lucide-react";
 import { Modal } from "@/components/modal/Modal";
 import SearchFilter from "@/components/table/pagination-table/utils/SearchFilter";
 import Pagination from "@/components/table/pagination-table/utils/Pagination";
-import { toast } from "react-toastify";
 import { TableLayout } from "@/components/table/pagination-table/utils/TableLayout";
-import { useDeleteGisFileMutation } from "@/redux/features/gis-data/gisApi";
 import { FaEdit } from "react-icons/fa";
 import TableHeader from "../table/pagination-table/utils/TableHeader";
 import ConfirmPopup from "../popup/ConfirmPopupModal";
 import { showToast } from "@/lib/Toast";
 import { ErrorPayload } from "@/typing";
-import {  useAppSelector } from "@/redux/store";
-import { useGetAllFormTemplatesQuery } from "@/redux/features/gis-form-template/gisFormTemplateApi";
+import { useAppSelector } from "@/redux/store";
+import { useDeleteDynamicFormMutation, useGetAllFormTemplatesQuery } from "@/redux/features/gis-form-template/gisFormTemplateApi";
+import { FaEye } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 
 const TemplateFormList = () => {
@@ -20,13 +20,14 @@ const TemplateFormList = () => {
     const [isFilterMode, setIsFilterMode] = useState<boolean>(false);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
-    const [selectedGisDataId, setSelectedGisDataId] = useState<string>("");
+    const [editId, setEditId] = useState<string>("");
+    const navigate = useNavigate();
+    const { gisData: currGisData } = useAppSelector(state => state.gis);
     const [searchParams, setSearchParams] = useState({
         currentPage: 1,
         perPage: 10,
         search: "",
     })
-    const { gisData: currGisData } = useAppSelector(state => state.gis);
 
     // api
     const { data, isLoading } = useGetAllFormTemplatesQuery({
@@ -38,7 +39,7 @@ const TemplateFormList = () => {
         },
     });
 
-    const [deleteGisData, { isLoading: deleteLoading, isSuccess: deleteSuccess }] = useDeleteGisFileMutation();
+    const [deleteFormTemplate, { isLoading: deleteLoading }] = useDeleteDynamicFormMutation();
 
     // utill function
     const tableClear = () => {
@@ -50,17 +51,13 @@ const TemplateFormList = () => {
     }
 
 
-    useEffect(() => {
-        if (deleteSuccess) {
-            toast.success("Delete Grade Successfully.")
-        }
-    }, [deleteSuccess])
-
+    // USEEFFCET
     const deleteFormDataHandler = async () => {
-        deleteGisData({
-            id: selectedGisDataId
+        deleteFormTemplate({
+            id: editId
         }).unwrap().then(() => {
             showToast("Delete Gis File Successfully.", { type: "success" });
+            setConfirmOpen(false);
         }).catch((err: ErrorPayload) => {
             err?.data?.errors.map(el => {
                 showToast(el.message, {
@@ -71,6 +68,7 @@ const TemplateFormList = () => {
     }
 
     const onEdit = (gisData: any) => {
+        console.log(gisData)
         // getGisFileJson({ id: `${gisData?.id || ""}` })
         //     .unwrap().then((data) => {
         //         dispatch(initGisFileData({
@@ -154,7 +152,14 @@ const TemplateFormList = () => {
                                         <td key={i} className="py-3 px-6 text-center">
                                             <div className="flex items-center justify-center gap-3">
                                                 <button
-                                                    className={`p-[7px] text-white border  bg-blue-500 hover:bg-gray-700`}
+                                                    className={`p-[7px] text-white bg-blue-500`}
+                                                    style={{ borderRadius: "5px" }}
+                                                    onClick={() => navigate(`/gis-forms/${el?.id || ""}/?title=${el?.name}`)}
+                                                >
+                                                    <FaEye size={15} color="white" />
+                                                </button>
+                                                <button
+                                                    className={`p-[7px] text-white border  bg-green-500 hover:bg-gray-700`}
                                                     style={{ borderRadius: "5px" }}
                                                     onClick={() => onEdit(el)}
                                                 >
@@ -164,12 +169,13 @@ const TemplateFormList = () => {
                                                     className={`p-[7px] text-white bg-red-500`}
                                                     style={{ borderRadius: "5px" }}
                                                     onClick={() => {
-                                                        setSelectedGisDataId(`${el?.id}`)
+                                                        setEditId(`${el?.id}`)
                                                         setConfirmOpen(true);
                                                     }}
                                                 >
                                                     <Trash size={15} />
                                                 </button>
+
                                             </div>
                                         </td>
 

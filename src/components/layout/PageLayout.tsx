@@ -29,7 +29,7 @@ const PageLayout = (props: {
                 <div className='flex items-center justify-between gap-5 mb-5'>
                     <div>
                         <h1 className='text-2xl capitalize'>{props?.title || ""}</h1>
-                        <p className='text-xs text-gray-500'>{`Home / ${pathname?.replace("/"," / ") || ""}`}</p>
+                        <p className='text-xs text-gray-500'>{props?.subtitle ? props?.subtitle : `Home / ${pathname?.replaceAll("/", " / ") || ""}`}</p>
                     </div>
                     <div>
                         <Button onClick={() => navigate(-1)} className='flex items-center gap-2 bg-primary-blue-900'>
