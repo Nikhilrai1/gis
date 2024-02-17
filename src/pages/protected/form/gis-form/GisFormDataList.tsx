@@ -8,7 +8,7 @@ import { FaEdit } from "react-icons/fa";
 import { showToast } from "@/lib/Toast";
 import { ErrorPayload } from "@/typing";
 import { useDeleteDynamicFormDataMutation, useGetAllDynamicFormDataQuery } from "@/redux/features/gis-form-template/gisFormTemplateApi";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ConfirmPopup from "@/components/popup/ConfirmPopupModal";
 import TableHeader from "@/components/table/pagination-table/utils/TableHeader";
 import { useSearchParams } from "react-router-dom"
@@ -19,7 +19,7 @@ const GisFormDataList = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string>("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // const { gisData: currGisData } = useAppSelector(state => state.gis);
   const [urlParams] = useSearchParams();
   const formTitle = urlParams.get("title") ? urlParams.get("title")?.split("-").join(" ") : "";
@@ -132,7 +132,7 @@ const GisFormDataList = () => {
               <thead className='bg-theme'>
                 <tr className="bg-primary-blue-900 text-white capitalize text-sm leading-normal">
                   <th className="py-3 px-6 text-left">{"S.N"}</th>
-                  {data?.results && Object.keys(data?.results[0]).filter(el => el !== "_id").map((label, i) => (
+                  {(data?.results && data?.results[0]) && Object.keys(data?.results[0]).filter(el => el !== "_id").map((label, i) => (
                     <th key={i} className="py-3 px-6 text-center capitalize">{label ? label?.split("_").join(" ") : ""}</th>
                   ))}
                   <th className="py-3 px-6 text-center">{"Actions"}</th>
