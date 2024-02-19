@@ -19,8 +19,6 @@ const GisFormDataList = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string>("");
-  // const navigate = useNavigate();
-  // const { gisData: currGisData } = useAppSelector(state => state.gis);
   const [urlParams] = useSearchParams();
   const formTitle = urlParams.get("title") ? urlParams.get("title")?.split("-").join(" ") : "";
 
@@ -92,7 +90,7 @@ const GisFormDataList = () => {
   }
 
   return (
-    <>
+    <div className="page-style">
       <ConfirmPopup
         showModal={confirmOpen}
         onClose={() => {
@@ -102,7 +100,7 @@ const GisFormDataList = () => {
         isLoading={deleteLoading}
         onConfirm={deleteFormDataHandler}
       />
-      <div className="w-full border p-5 bg-white">
+      <div className="border p-5 bg-white">
         <div className="mb-5">
           <TableHeader
             title={`Gis ${formTitle} Form List`}
@@ -224,7 +222,7 @@ const GisFormDataList = () => {
         <h1>hello</h1>
         {/* <GisFileUpload setModalOpen={setModalOpen} /> */}
       </Modal>
-    </>
+    </div>
   )
 }
 

@@ -24,7 +24,7 @@ type FormSchema = z.infer<typeof formSchema>
 interface GisFileUploadProps {
     setModalOpen: (isModalOpen: boolean) => void;
 }
-
+    
 // form
 const GisFileUpload = ({ setModalOpen }: GisFileUploadProps) => {
     const [file, setFile] = useState<File | null>(null);

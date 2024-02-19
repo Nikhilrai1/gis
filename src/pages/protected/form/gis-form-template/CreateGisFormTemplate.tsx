@@ -62,7 +62,7 @@ const CreateGisFormTemplate = () => {
   };
 
   return (
-    <PageLayout title="Create Gis Form Template">
+    <PageLayout className="page-style" title="Create Gis Form Template">
       <div className="bg-white p-5 rounded-lg shadow-2xl border">
 
         <Form {...form}>

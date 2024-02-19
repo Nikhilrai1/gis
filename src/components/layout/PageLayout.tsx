@@ -3,6 +3,7 @@ import React from 'react';
 import BounceLoader from '../loader/BounceLoader';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
 
 export const Loader = () => {
@@ -20,12 +21,13 @@ const PageLayout = (props: {
     subtitle?: string;
     children?: React.ReactNode;
     isLoading?: boolean;
+    className?: string;
 }) => {
     const navigate = useNavigate();
     const pathname = useLocation()?.pathname.replace("/", "");
     return (
         <>
-            <div className='relative'>
+            <div className={cn('relative',props.className)}>
                 <div className='flex items-center justify-between gap-5 mb-5'>
                     <div>
                         <h1 className='text-2xl capitalize'>{props?.title || ""}</h1>
@@ -38,7 +40,7 @@ const PageLayout = (props: {
                         </Button>
                     </div>
                 </div>
-                <div className=''>
+                <div>
                     {props.children}
                     {props?.isLoading && (
                         <Loader />

@@ -2,7 +2,9 @@ import CreateGisFormFromTemplate from "@/components/gis/gis-form/CreateGisFormFr
 
 const CreateGisForm = () => {
   return (
-    <CreateGisFormFromTemplate />
+    <div className="page-style">
+      <CreateGisFormFromTemplate />
+    </div>
   )
 }
 

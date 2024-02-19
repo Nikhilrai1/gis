@@ -7,10 +7,12 @@ import { dashboardNavItems } from '../navbar/DashboardNavItems';
 const AuthSidebar = () => {
     const [isResize, setIsResize] = useState(true);
     const pathname = useLocation()?.pathname;
+    if(pathname.includes("/map")) return null;
+
     return (
-        <div className={`shadow-md ${isResize && "md:w-[300px]"} sidebar-height sticky top-[107px] left-0 z-50 bg-primary-blue-900`}>
+        <div className={`shadow-md ${isResize && "md:w-[300px]"} transition-all duration-500 ease-linear sidebar-height sticky top-[107px] left-0 z-50 bg-primary-blue-900`}>
             <div className='relative py-5 px-7 h-full'>
-                <button onClick={() => setIsResize(prev => !prev)} className='absolute top-[48%] -right-3 pt-1 pb-1 rounded-full bg-primary-blue-900 text-white'>
+                <button onClick={() => setIsResize(prev => !prev)} className='absolute top-[48%] z-[50] -right-3 pt-1 pb-1 rounded-full bg-primary-blue-900 text-white'>
                     <GripVertical />
                 </button>
                 <div className='flex flex-col gap-5'>
@@ -23,7 +25,7 @@ const AuthSidebar = () => {
                                     <span>
                                         <Icon size={20} />
                                     </span>
-                                    <p className="hidden md:block text-sm whitespace-nowrap">{link.name}</p>
+                                    {isResize && <p className="hidden md:block text-sm whitespace-nowrap">{link.name}</p>}
                                 </Link>
                             )
                         })}
