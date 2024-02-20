@@ -52,16 +52,19 @@ function GisMap() {
     // Update color when input value changes
     color = event.target.value;
     // setCurrColor(color);
-    console.log("color",color)
+    console.log("color", color)
   };
 
   return (
-    <div>
-      <input
-        type="color"
-        value={color}
-        onChange={handleChangeColor}
-      />
+    <div className="relative">
+      <div className="absolute bottom-2 z-[15] left-2 text-white p-2 flex flex-col items-center gap-2 rounded-sm bg-primary-blue-900">
+        <h1>Color Change</h1>
+        <input
+          type="color"
+          value={color}
+          onChange={handleChangeColor}
+        />
+      </div>
       <MapContainer zoom={7} center={nepalCenterPos}>
         <GeoJSON
           onEachFeature={onEachFeature}

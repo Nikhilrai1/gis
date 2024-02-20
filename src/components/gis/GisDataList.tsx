@@ -121,7 +121,6 @@ const GisDataList = () => {
                         }
                     />
 
-
                 </div>
 
 
