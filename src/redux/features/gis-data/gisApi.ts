@@ -12,9 +12,10 @@ export const gisApi = rootApi.injectEndpoints({
             }),
             providesTags: ["gis-data"],
         }),
-        getSingleGisFileJson: builder.query<GetAllGeoJson, { id: string }>({
+        getSingleGisFileJson: builder.query<GetAllGeoJson, { id: string, page?: number, per_page?: number }>({
             query: ({ id }) => ({
-                url: `/gis-file-upload/${id}/`,
+                url: `/gis-file-upload/${id}/?page=${"all"}`,
+                // url: `/gis-file-upload/${id}/?page=${page || 1}&per_page=${per_page || 10}`,
             }),
             providesTags: ["gis-data"],
         }),
@@ -53,6 +54,7 @@ export const gisApi = rootApi.injectEndpoints({
 export const {
     useGetAllGisFileQuery,
     useLazyGetSingleGisFileJsonQuery,
+    useGetSingleGisFileJsonQuery,
     usePostGisFileMutation,
     useUpdateGisFileMutation,
     useDeleteGisFileMutation,

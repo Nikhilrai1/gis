@@ -2,8 +2,11 @@ import { showToast } from "@/lib/Toast";
 import { LatLngExpression } from "leaflet";
 import proj4 from "proj4";
 
+
 type CoordinatesPointType = [number, number];
 type CoordinatesPolygonType = [CoordinatesPointType[]];
+
+
 
 function isProjectedCoordinates(coordinates: CoordinatesPointType) {
   const isGeographic =
@@ -13,7 +16,6 @@ function isProjectedCoordinates(coordinates: CoordinatesPointType) {
     typeof coordinates[1] === "number" &&
     Math.abs(coordinates[0]) <= 90 &&
     Math.abs(coordinates[1]) <= 180;
-
   return !isGeographic;
 }
 
@@ -25,18 +27,12 @@ export const TransformedPointCoordinates = (
     "+proj=utm +zone=45 +datum=WGS84 +units=m +no_defs";
   const leafletProjection = "+proj=longlat +datum=WGS84 +no_defs";
 
-  // const transformedCoords: LatLngExpression = proj4(
-  //   originalProjection,
-  //   leafletProjection,
-  //   coordinates
-  // );
-
-  // return transformedCoords.reverse();
 
   if (!isProjectedCoordinates(coordinates))
     return [coordinates[1], coordinates[0]];
 
   try {
+    // proj4()
     const transformedCoords: number[] | undefined = proj4(
       originalProjection,
       leafletProjection,

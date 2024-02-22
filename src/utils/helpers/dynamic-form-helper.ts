@@ -1,5 +1,5 @@
+import { DynamicObjectType } from "@/typing";
 import { UseFormSetValue } from "react-hook-form";
-import { DynamicObjectType } from "../interfaces/common";
 
 export const DynamicFormFields = [
   { label: "String", value: "StringField" },

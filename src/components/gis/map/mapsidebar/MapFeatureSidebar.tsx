@@ -61,7 +61,7 @@ const MapFeatureSidebar = ({ isOpen }: MapFeatureSidebarProps) => {
 
     const [settingOpen, setSettingOpen] = useState(false);
     return (
-        <div className="relative h-full flex overflow-hidden bg-[#03031d]">
+        <div className="absolute left-[85px] top-0 h-full flex overflow-hidden ">
             <SheetBar
                 modalOpen={settingOpen}
                 setModalOpen={setSettingOpen}
@@ -92,7 +92,7 @@ const MapFeatureSidebar = ({ isOpen }: MapFeatureSidebarProps) => {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        className="inset-y-0 left-0 z-50 shadow-lg max-w-[450px]"
+                        className="inset-y-0 left-0 z-50 shadow-lg max-w-[450px] bg-[#03031d]"
                         initial={{ x: '-100%' }}
                         animate={{ x: 0 }}
                         exit={{ x: '-100%' }}

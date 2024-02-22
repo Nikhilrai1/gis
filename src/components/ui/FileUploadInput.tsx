@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FieldValues, UseFormRegister } from "react-hook-form";
 import { FaEdit } from "react-icons/fa";
-import { FaDeleteLeft } from "react-icons/fa6";
 import { FaFileArchive } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { IconType } from "react-icons";

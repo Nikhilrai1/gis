@@ -14,11 +14,12 @@ import { ErrorPayload } from "@/typing"
 import BounceLoader from "../loader/BounceLoader"
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
-interface StoreSwitcherProps extends PopoverTriggerProps {
+interface SwitcherProps extends PopoverTriggerProps {
+    onSwitch: () => void;
 }
 
 
-const GisFileSwitcher = ({ className }: StoreSwitcherProps) => {
+const GisFileSwitcher = ({ className, onSwitch }: SwitcherProps) => {
     const [open, setOpen] = useState(false)
     const dispatch = useAppDispatch();
     const { gisData: currGisData } = useAppSelector(state => state.gis);
@@ -88,9 +89,7 @@ const GisFileSwitcher = ({ className }: StoreSwitcherProps) => {
                     <CommandList>
                         <CommandGroup>
                             <CommandItem
-                                onSelect={() => {
-                                    setOpen(false)
-                                }}
+                                onSelect={() => onSwitch()}
                             >
                                 <PlusCircle className="mr-2 h-5 w-5" />
                                 Add Gis File

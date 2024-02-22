@@ -1,6 +1,3 @@
-
-"use client"
-
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'

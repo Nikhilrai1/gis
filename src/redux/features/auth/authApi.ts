@@ -27,7 +27,6 @@ export const authApi = rootApi.injectEndpoints({
       onQueryStarted(__args, { dispatch, queryFulfilled }) {
         queryFulfilled
           .then((data) => {
-            console.log("verify data",data)
             dispatch(initVerifyUser(data.data));
           })
           .catch(() => {

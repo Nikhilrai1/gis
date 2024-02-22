@@ -4,10 +4,12 @@ import { AuthSlice } from "./features/auth/authSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { rootApi } from "./root.api";
 import { gisDataSlice } from "./features/gis-data/gisDataSlice";
+import { gisSettingSlice } from "./features/gis-setting/gisSettingSlice";
 
 const rootReducer = combineReducers({
   auth: AuthSlice.reducer,
   gis: gisDataSlice.reducer,
+  gisSetting: gisSettingSlice.reducer,
   [rootApi.reducerPath]: rootApi.reducer,
 });
 

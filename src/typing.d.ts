@@ -65,3 +65,21 @@ export interface GeoJsonI {
   type: string;
   features: GeoJsonFeatureI[];
 }
+
+
+export interface GeoJsonType {
+  id: string;
+  type: string;
+  properties: {
+    [key: string]: string;
+  };
+  geometry: {
+    type: string;
+    coordinates: any;
+  }
+}
+
+export type CoordinatesPointType = [number, number];
+export type CoordinatesPolygonType = [CoordinatesPointType[]];
+
+

@@ -8,12 +8,15 @@ import { dashboardNavItems } from "./DashboardNavItems";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { logout } from "@/redux/features/auth/authSlice";
 import GisFileSwitcher from "@/components/gis/GisFileSwitcher";
+import { Modal } from "@/components/modal/Modal";
+import GisFileUpload from "@/components/gis/GisFileUpload";
 
 const AuthNavbar = () => {
     const navigate = useNavigate();
     const menuContainer = useRef(null);
     const dispatch = useAppDispatch();
     const { pathname } = useLocation();
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
 
     // STATE
     const [showProfileMenu, setShowProfileMenu] = useState<boolean>(false);
@@ -67,7 +70,7 @@ const AuthNavbar = () => {
                 />
             </Link>
             <div className="flex gap-8 items-center" ref={menuContainer}>
-                <GisFileSwitcher />
+                <GisFileSwitcher onSwitch={() => setModalOpen(true)} />
                 <CgMenuGridO
                     size={50}
                     className="cursor-pointer p-2 rounded-full hover:bg-slate-700"
@@ -132,6 +135,13 @@ const AuthNavbar = () => {
                     Log out
                 </p>
             </div>
+            <Modal
+                title="Upload Gis File"
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
+            >
+                <GisFileUpload setModalOpen={setModalOpen} />
+            </Modal>
         </nav>
     );
 };

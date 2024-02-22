@@ -1,6 +1,6 @@
 import { ChartTypeEnum } from "../chart/chart";
 
-export const randomRgbColorGenerator = () => {
+export const randomRgbColorGenerator = (): string => {
   const R = Math.floor(Math.random() * 256);
   const G = Math.floor(Math.random() * 256);
   const B = Math.floor(Math.random() * 256);
@@ -10,9 +10,10 @@ export const randomRgbColorGenerator = () => {
 
 export const createBackgroundColor = (type: ChartTypeEnum, length: number) => {
   if (type === ChartTypeEnum.DOUGHNUT || type === ChartTypeEnum.PIE) {
-    const colorArray = [];
+    const colorArray: string[] = [];
     for (let i = 0; i < length; i++) {
-      colorArray.push(randomRgbColorGenerator());
+      const color = randomRgbColorGenerator();
+      colorArray.push(color);
     }
     return colorArray;
   } else return randomRgbColorGenerator();
