@@ -1,3 +1,14 @@
+export interface GisData {
+  id: number | string;
+  name: string;
+  geojson?: GisJson[];
+  _type?: string;
+  crs: string;
+  properties_col_name: string;
+  geometries_col_name?: string;
+}
+
+
 export interface GisFileI {
   id: number;
   name: string;
@@ -27,7 +38,7 @@ export interface GisAllFileResponseI {
   total: number;
   per_page: number;
   total_pages: number;
-  results: GisFileI[];
+  results: GisData[];
 }
 
 
@@ -57,3 +68,20 @@ interface Properties {
   ward_no: string;
 }
 
+
+// collection filter
+interface Operator {
+  label: string;
+  value: string;
+}
+
+interface Attribute {
+  data_type: string;
+  min: null;
+  max: null;
+  operators: Operator[];
+}
+
+export interface CollectionFilter {
+  [key: string]: Attribute;
+}

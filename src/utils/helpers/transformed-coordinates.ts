@@ -26,6 +26,9 @@ export const TransformedPointCoordinates = (
   const originalProjection =
     "+proj=utm +zone=45 +datum=WGS84 +units=m +no_defs";
   const leafletProjection = "+proj=longlat +datum=WGS84 +no_defs";
+  // const originalProjection =
+  //   "+proj=utm +zone=45 +datum=WGS84 +units=m +no_defs";
+  // const leafletProjection = "EPSG:3857";
 
 
   if (!isProjectedCoordinates(coordinates))

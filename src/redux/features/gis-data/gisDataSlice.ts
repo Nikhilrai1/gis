@@ -1,15 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { GisJson } from "./gis";
+import { GisData } from "./gis";
 
 
 interface InitialGisData {
     gisData: GisData | null
 }
-export interface GisData {
-    id: number | string;
-    name: string;
-    geojson?: GisJson[];
-}
+
+
+
 
 const initialState: InitialGisData = {
     gisData: null

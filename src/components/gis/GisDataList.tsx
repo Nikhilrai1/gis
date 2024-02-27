@@ -13,7 +13,8 @@ import ConfirmPopup from "../popup/ConfirmPopupModal";
 import { showToast } from "@/lib/Toast";
 import { ErrorPayload } from "@/typing";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { GisData, initGisFileData } from "@/redux/features/gis-data/gisDataSlice";
+import { initGisFileData } from "@/redux/features/gis-data/gisDataSlice";
+import { GisData } from "@/redux/features/gis-data/gis";
 
 
 const GisDataList = () => {
@@ -78,7 +79,10 @@ const GisDataList = () => {
                 dispatch(initGisFileData({
                     id: gisData?.id || "",
                     name: gisData?.name || "",
-                    geojson: data?.results
+                    geojson: data?.results,
+                    crs: gisData?.crs || "",
+                    properties_col_name: gisData?.properties_col_name || "",
+
                 }))
             }).catch((err: ErrorPayload) => {
                 err?.data?.errors.map(el => {

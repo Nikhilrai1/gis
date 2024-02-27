@@ -61,7 +61,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({ options, onSelect, cla
                         ? <p>
                             {options.find((option) => option.value.toLocaleLowerCase() === value.toLowerCase())?.label}
                         </p>
-                        : <p className="text-gray-500 text-xs">{placeholder}</p>}
+                        : <p className="text-gray-500 text-xs capitalize">{placeholder}</p>}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>

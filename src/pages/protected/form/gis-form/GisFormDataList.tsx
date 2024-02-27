@@ -12,6 +12,9 @@ import { useParams } from "react-router-dom";
 import ConfirmPopup from "@/components/popup/ConfirmPopupModal";
 import TableHeader from "@/components/table/pagination-table/utils/TableHeader";
 import { useSearchParams } from "react-router-dom"
+import { useDownloadExcelQuery } from "@/redux/features/excel/excelApi";
+import * as xlsx from "xlsx";
+import ExcelUpload from "../../excel-upload/ExcelUpload";
 
 const GisFormDataList = () => {
   // state
@@ -21,7 +24,7 @@ const GisFormDataList = () => {
   const [selectedId, setSelectedId] = useState<string>("");
   const [urlParams] = useSearchParams();
   const formTitle = urlParams.get("title") ? urlParams.get("title")?.split("-").join(" ") : "";
-
+  const { id } = useParams();
   const [searchParams, setSearchParams] = useState({
     currentPage: 1,
     perPage: 10,
@@ -38,8 +41,8 @@ const GisFormDataList = () => {
       search: searchParams?.search
     },
   });
-
-
+  const { data: downloadExcelData } = useDownloadExcelQuery(id);
+ 
   const [deleteFormTemplate, { isLoading: deleteLoading }] = useDeleteDynamicFormDataMutation();
 
   // utill function
@@ -86,7 +89,21 @@ const GisFormDataList = () => {
     //             })
     //         })
     //     })
+  }
 
+  const onDownload = () => {
+    console.log("downloadExcelData", downloadExcelData)
+    if (downloadExcelData) {
+      //@ts-ignore
+      const workSheet = xlsx.utils.json_to_sheet(downloadExcelData);
+      const workBook = xlsx.utils.book_new();
+      xlsx.utils.book_append_sheet(workBook, workSheet, "Sheet1");
+      xlsx.writeFile(workBook, "Datasheet.xlsx");
+    }
+  };
+
+  const onUpload = () => {
+    setModalOpen(true);
   }
 
   return (
@@ -120,6 +137,8 @@ const GisFormDataList = () => {
             onTableSearch={(val) =>
               setSearchParams({ ...searchParams, search: val, currentPage: 1 })
             }
+            onDownload={onDownload}
+            onUpload={onUpload}
           />
         </div>
 
@@ -175,8 +194,6 @@ const GisFormDataList = () => {
 
                       </div>
                     </td>
-
-
                   </tr>
                 ))}
               </tbody>
@@ -215,12 +232,11 @@ const GisFormDataList = () => {
 
       </div >
       <Modal
-        title="Upload Gis File"
+        title="Upload Excel"
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
       >
-        <h1>hello</h1>
-        {/* <GisFileUpload setModalOpen={setModalOpen} /> */}
+        <ExcelUpload />
       </Modal>
     </div>
   )

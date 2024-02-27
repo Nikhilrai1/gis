@@ -1,7 +1,9 @@
 
+import { Tooltip } from "@/components/ui/tooltip";
 import { Cross, Filter, Search, XSquare } from "lucide-react";
 import { useState } from "react";
-
+import { FaFileDownload } from "react-icons/fa";
+import { RiFileExcel2Fill } from "react-icons/ri";
 
 
 interface SearchFilterProps {
@@ -9,11 +11,13 @@ interface SearchFilterProps {
     setIsFilterMode: any;
     onTableSearch: (val: string) => void;
     onTableClear: () => void;
+    onDownload?: () => void;
+    onUpload?: () => void;
 }
 
-const SearchFilter = ({ isFilterMode, setIsFilterMode, onTableSearch, onTableClear }: SearchFilterProps) => {
+const SearchFilter = ({ isFilterMode, setIsFilterMode, onTableSearch, onTableClear, onDownload, onUpload }: SearchFilterProps) => {
     const [searchVal, setSearchVal] = useState<string>("");
-    const [isSearch,setIsSearch] = useState<boolean>(false);
+    const [isSearch, setIsSearch] = useState<boolean>(false);
 
     // Event handlers
     const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -33,7 +37,7 @@ const SearchFilter = ({ isFilterMode, setIsFilterMode, onTableSearch, onTableCle
                 </button>
                 <div className=" flex items-center justify-center gap-3 border border-gray-400 px-3 py-2 rounded-md bg-white ">
                     <div className="flex items-center justify-center">
-                        <Search size={20} className="text-gray-400"/>
+                        <Search size={20} className="text-gray-400" />
                     </div>
                     <input
                         type="text"
@@ -45,9 +49,19 @@ const SearchFilter = ({ isFilterMode, setIsFilterMode, onTableSearch, onTableCle
                 </div>
             </div>
 
-            <div className="flex items-start justify-end">
-                {(isFilterMode || (searchVal !== "" && isSearch)) && <button onClick={() => onTableClear()} className={`filter-button p-2 bg-red-500 rounded-md`}>
-                    <XSquare size={30} className="text-white" />
+            <div className="flex items-center gap-3 justify-end">
+                {onUpload && <button onClick={onUpload} className="w-[32px] h-[32px] bg-green-500 rounded-md p-1 flex items-center justify-center">
+                    <Tooltip label={"Excel Upload"}>
+                        <RiFileExcel2Fill size={30} className="text-white" />
+                    </Tooltip>
+                </button>}
+                {onDownload && <button onClick={onDownload} className="w-[32px] h-[32px] bg-green-500 p-1 rounded-md flex items-center justify-center">
+                    <Tooltip label={"Download"}>
+                        <FaFileDownload size={21} className="text-white" />
+                    </Tooltip>
+                </button>}
+                {(isFilterMode || (searchVal !== "" && isSearch)) && <button onClick={() => onTableClear()} className={`filter-button p-2 rounded-md`}>
+                    <XSquare size={30} className="text-red-500" />
                 </button>}
             </div>
             <div>

@@ -1,6 +1,85 @@
-import { rootApi } from "@/redux/root.api";
+import { getAuthToken, rootApi } from "@/redux/root.api";
 import { SearchParamsI } from "@/typing";
-import { GetAllGeoJson, GisAllFileResponseI, IGisPropertiesResponse } from "./gis";
+import { CollectionFilter, GetAllGeoJson, GisAllFileResponseI, IGisPropertiesResponse } from "./gis";
+import { BASE_API_URL } from "@/lib/urlConfig";
+
+// Function to fetch data from an API
+interface FetchDataParams {
+    url: string;
+    payload?: any;
+    method: "GET" | "POST"
+}
+
+async function fetchData({ url, payload, method = "GET" }: FetchDataParams) {
+    const options = {
+        method: method,
+        headers: {
+            'Authorization': `Bearer ${getAuthToken()}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    };
+    if (payload) {
+        options.body = JSON.stringify(payload);
+    }
+
+    try {
+        const response = await fetch(`${BASE_API_URL}${url}`, options);
+        const responseData = await response.json();
+        if (!response.ok) throw new Error(JSON.stringify(responseData));
+        return responseData;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+}
+
+export interface FetchAttributeWithValuesResponse {
+    unique_values: string[];
+    data_type: string;
+    attribute: string;
+}
+
+// Fetch data from all three APIs simultaneously
+export const fetchAttributeWithValues = async (collection: string) => {
+    try {
+        const attributeData = fetchData({
+            method: "POST",
+            url: 'collection-atrributes/',
+            payload: {
+                collection
+            }
+        }).then((data) => {
+            const apiData: Promise<FetchDataParams>[] = [];
+            data.forEach((item) => {
+                apiData.push(fetchData({
+                    url: 'distinct-values/',
+                    payload: {
+                        collection,
+                        attribute: item
+                    },
+                    method: "POST"
+                }))
+            })
+
+            const allCombinedData = Promise.all(apiData)
+                .then((combinedData) => {
+                    // console.log(combinedData);
+                    return combinedData;
+                })
+                .catch((error: any) => {
+                    const errorMessage = error.message;
+                    console.log('Error fetching data:', errorMessage);
+                });
+            return allCombinedData;
+        }).catch((error) => error);
+
+        // console.log("Attribute Data", await attributeData);
+        return attributeData;
+    } catch (error: any) {
+        const errorMessage = error.message;
+        console.log('Error fetching data:', errorMessage);
+    }
+}
 
 
 export const gisApi = rootApi.injectEndpoints({
@@ -48,6 +127,14 @@ export const gisApi = rootApi.injectEndpoints({
             }),
             providesTags: ["gis-data"],
         }),
+        getCollectionFilter: builder.mutation<CollectionFilter, { collection: string }>({
+            query: ({ collection }) => ({
+                url: `/collection-filter-fields/`,
+                method: "POST",
+                body: { collection },
+            }),
+            invalidatesTags: ["gis-data"],
+        }),
     }),
 });
 
@@ -58,5 +145,6 @@ export const {
     usePostGisFileMutation,
     useUpdateGisFileMutation,
     useDeleteGisFileMutation,
-    useGetGisPropertiesQuery
+    useGetGisPropertiesQuery,
+    useGetCollectionFilterMutation
 } = gisApi;

@@ -1,4 +1,3 @@
-"use client"
 import { useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
@@ -8,10 +7,11 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { useGetAllGisFileQuery, useLazyGetSingleGisFileJsonQuery } from "@/redux/features/gis-data/gisApi"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { FaRegFileZipper } from "react-icons/fa6";
-import { GisData, initGisFileData } from "@/redux/features/gis-data/gisDataSlice"
+import { initGisFileData } from "@/redux/features/gis-data/gisDataSlice"
 import { showToast } from "@/lib/Toast"
 import { ErrorPayload } from "@/typing"
 import BounceLoader from "../loader/BounceLoader"
+import { GisData } from "@/redux/features/gis-data/gis"
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 interface SwitcherProps extends PopoverTriggerProps {
@@ -38,7 +38,9 @@ const GisFileSwitcher = ({ className, onSwitch }: SwitcherProps) => {
                 dispatch(initGisFileData({
                     id: gisData?.id || "",
                     name: gisData?.name || "",
-                    geojson: data?.results
+                    geojson: data?.results,
+                    crs: gisData?.crs || "",
+                    properties_col_name: gisData?.properties_col_name || "",
                 }))
             }).catch((err: ErrorPayload) => {
                 err?.data?.errors.map(el => {

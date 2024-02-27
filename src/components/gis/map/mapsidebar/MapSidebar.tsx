@@ -3,19 +3,33 @@ import { AiOutlineUnorderedList } from "react-icons/ai"
 import MapFeatureSidebar from "./MapFeatureSidebar";
 import MapSettingSidebar from "./MapSettingSidebar";
 import { Settings } from "lucide-react";
+import { VscSettings } from "react-icons/vsc";
+import MapFilterbar from "./GisMapFilterbar";
+import { Tooltip } from "@/components/ui/tooltip";
 
 const MapSidebar = () => {
     const [showFeatureTable, setShowFeatureTable] = useState<boolean>(false);
     const [showMapSetting, setShowSetting] = useState<boolean>(false);
+    const [showFilterbar, setShowFilterbar] = useState<boolean>(false);
     return (
         <div className="bg-primary-blue-900 text-white flex">
             <div className="py-5 px-7 flex flex-col gap-5">
                 <button onClick={() => setShowFeatureTable(prev => !prev)}>
-                    <AiOutlineUnorderedList size={30} />
+                    <Tooltip label={"Feature"}>
+                        <AiOutlineUnorderedList size={30} />
+                    </Tooltip>
                 </button>
                 <button onClick={() => setShowSetting(prev => !prev)}>
-                    <Settings size={30} />
+                    <Tooltip label={"Map Settings"}>
+                        <Settings size={30} />
+                    </Tooltip>
                 </button>
+                <button onClick={() => setShowFilterbar(prev => !prev)}>
+                    <Tooltip label={"Filterbar"}>
+                        <VscSettings size={30} />
+                    </Tooltip>
+                </button>
+
             </div>
 
             {/* map feature sidebar */}
@@ -27,6 +41,11 @@ const MapSidebar = () => {
             <MapSettingSidebar
                 isOpen={showMapSetting}
                 setIsOpen={setShowSetting}
+            />
+
+            <MapFilterbar
+                isOpen={showFilterbar}
+                setIsOpen={setShowFilterbar}
             />
 
         </div>

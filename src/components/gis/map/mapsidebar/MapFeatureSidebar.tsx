@@ -7,6 +7,7 @@ import { useGetGisPropertiesQuery } from '@/redux/features/gis-data/gisApi';
 import { useAppSelector } from '@/redux/store';
 import { useState } from 'react';
 import { SheetBar } from '@/components/ui/SheetSidebar';
+// import { FaAnglesLeft } from "react-icons/fa6";
 
 interface MapFeatureSidebarProps {
     isOpen: boolean;
@@ -61,7 +62,7 @@ const MapFeatureSidebar = ({ isOpen }: MapFeatureSidebarProps) => {
 
     const [settingOpen, setSettingOpen] = useState(false);
     return (
-        <div className="absolute left-[85px] top-0 h-full flex overflow-hidden ">
+        <div className="absolute left-[85px] top-0 h-full flex overflow-hidden">
             <SheetBar
                 modalOpen={settingOpen}
                 setModalOpen={setSettingOpen}
@@ -98,7 +99,10 @@ const MapFeatureSidebar = ({ isOpen }: MapFeatureSidebarProps) => {
                         exit={{ x: '-100%' }}
                         transition={{ duration: 0.2 }}
                     >
-                        <div className={`h-full  transition ease-in-out transform duration-500  flex flex-col gap-5`}>
+                        <div className={`h-full  transition ease-in-out transform duration-500  flex flex-col gap-5 relative`}>
+                            {/* <button className='absolute top-0 -right-3 z-[100] bg-primary-blue-900 '>
+                                <FaAnglesLeft color="green" size={20} className="" onClick={() => { }} />
+                            </button> */}
                             {/* search */}
                             <div className="flex items-center gap-5 justify-between p-5">
                                 <div className={`transition-opacity duration-500 ease-in-out flex items-center gap-1 bg-gray-50 rounded-xl p-2`}>
