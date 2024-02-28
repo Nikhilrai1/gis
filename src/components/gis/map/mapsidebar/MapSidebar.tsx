@@ -6,6 +6,7 @@ import { Settings } from "lucide-react";
 import { VscSettings } from "react-icons/vsc";
 import MapFilterbar from "./GisMapFilterbar";
 import { Tooltip } from "@/components/ui/tooltip";
+import GisConfig from "./GisConfig";
 
 const MapSidebar = () => {
     const [showFeatureTable, setShowFeatureTable] = useState<boolean>(false);
@@ -29,6 +30,11 @@ const MapSidebar = () => {
                         <VscSettings size={30} />
                     </Tooltip>
                 </button>
+                {/* <button onClick={() => setGisConfig(prev => !prev)}>
+                    <Tooltip label={"Filterbar"}>
+                        <GrDocumentConfig size={30} />
+                    </Tooltip>
+                </button> */}
 
             </div>
 
@@ -46,6 +52,11 @@ const MapSidebar = () => {
             <MapFilterbar
                 isOpen={showFilterbar}
                 setIsOpen={setShowFilterbar}
+            />
+
+            <GisConfig
+                isOpen={true}
+                setIsOpen={() => {}}
             />
 
         </div>

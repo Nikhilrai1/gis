@@ -5,14 +5,22 @@ import { Marker, Polygon, Polyline } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster"
 import InfoPopup from "./mapcomponent/InfoPopup";
 import { useAppSelector } from "@/redux/store";
+import { useMemo } from "react";
+
 
 interface PlotMapProps {
     features: GeoJsonType[]
 }
 
 const PlotMap = ({ features }: PlotMapProps) => {
-    const { color: gisColor, fill, outline } = useAppSelector(state => state.gisSetting);
 
+    // state
+    const { color: gisColor, fill, outline } = useAppSelector(state => state.gisSetting);
+    const { attributeValueConfig } = useAppSelector(state => state.gis);
+    const attributeValueConfigData = useMemo(() => attributeValueConfig, [attributeValueConfig])
+    console.log(attributeValueConfigData, "attributeValueConfigData");
+
+    // highlight polygon on click
     const highlightPloygon = (e) => {
         let layer = e.target;
         if (fill) {
@@ -31,6 +39,7 @@ const PlotMap = ({ features }: PlotMapProps) => {
         }
     };
 
+    // highlight polyline on click
     const highlightPolyline = (e) => {
         let layer = e.target;
         if (outline) {
@@ -50,6 +59,26 @@ const PlotMap = ({ features }: PlotMapProps) => {
                         const geometry = feature.geometry;
                         const coordinates = feature.geometry.coordinates;
                         const properties = feature.properties;
+                        const attributeValue = attributeValueConfigData?.attribute && properties[attributeValueConfigData.attribute];
+                        const attributeValueData = (attributeValue && attributeValueConfigData?.values) && attributeValueConfigData.values[attributeValue] && attributeValueConfigData.values[`${attributeValue}`];
+                        //@ts-ignore
+                        let customColor = attributeValueData?.color;
+                        // console.log(attributeValue)
+
+                        let addColor = false;
+                        if(typeof attributeValue === "string"){
+                            addColor = true;
+                        }
+
+                        if(typeof attributeValue === "number"){
+                            attributeValueConfigData?.values && Object.entries(attributeValueConfigData.values).forEach(([_,item]) => {
+                                if((item.min && item?.max) && (attributeValue > item.min && attributeValue < item.max)){
+                                    addColor = true;
+                                    customColor = item.color;
+                                }
+                            })
+                        }
+
 
                         if (geometry.type.toLowerCase() === "point") {
                             return (
@@ -75,6 +104,7 @@ const PlotMap = ({ features }: PlotMapProps) => {
                             return (
                                 <Polyline
                                     key={i}
+                                    pathOptions={customColor ? { color: customColor } : {}}
                                     positions={TransformedLineCoordinates(coordinates)}
                                     eventHandlers={{
                                         click: highlightPolyline
@@ -88,6 +118,7 @@ const PlotMap = ({ features }: PlotMapProps) => {
                             return (
                                 <Polygon
                                     key={i}
+                                    pathOptions={(addColor && customColor) ? { fillColor: customColor, fillOpacity: 0.6, color: "black" } : {}}
                                     positions={TransformedPolygonCoordinates(coordinates)}
                                     eventHandlers={{
                                         click: highlightPloygon

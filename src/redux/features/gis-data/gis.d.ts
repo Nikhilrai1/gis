@@ -79,6 +79,8 @@ interface Attribute {
   data_type: string;
   min: null;
   max: null;
+  mean: number | null,
+  st_dev: number | null,
   operators: Operator[];
 }
 

@@ -127,6 +127,22 @@ export const gisApi = rootApi.injectEndpoints({
             }),
             providesTags: ["gis-data"],
         }),
+        getCollectionAttribute: builder.mutation<string[], { collection: string }>({
+            query: ({ collection }) => ({
+                url: `/collection-atrributes/`,
+                method: "POST",
+                body: { collection },
+            }),
+            invalidatesTags: ["gis-data"],
+        }),
+        getAttributeUniqueValue: builder.mutation<FetchAttributeWithValuesResponse, { collection: string, attribute: string }>({
+            query: (data) => ({
+                url: `/distinct-values/`,
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["gis-data"],
+        }),
         getCollectionFilter: builder.mutation<CollectionFilter, { collection: string }>({
             query: ({ collection }) => ({
                 url: `/collection-filter-fields/`,
@@ -146,5 +162,7 @@ export const {
     useUpdateGisFileMutation,
     useDeleteGisFileMutation,
     useGetGisPropertiesQuery,
-    useGetCollectionFilterMutation
+    useGetCollectionFilterMutation,
+    useGetCollectionAttributeMutation,
+    useGetAttributeUniqueValueMutation
 } = gisApi;

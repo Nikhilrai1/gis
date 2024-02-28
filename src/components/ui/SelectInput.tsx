@@ -58,7 +58,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({ options, onSelect, cla
                     className="w-full justify-between"
                 >
                     {value
-                        ? <p>
+                        ? <p className="capitalize">
                             {options.find((option) => option.value.toLocaleLowerCase() === value.toLowerCase())?.label}
                         </p>
                         : <p className="text-gray-500 text-xs capitalize">{placeholder}</p>}
