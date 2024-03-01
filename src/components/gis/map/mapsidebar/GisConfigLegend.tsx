@@ -42,7 +42,6 @@ const GisConfigLegend = ({ uniqueValues, attribute, dataType, statistics }: GisC
     // handle clip for color config by legend
     const handleClip = () => {
         const newAttributesValueConfigs: AttributeValue = {};
-        console.log(attributes, "attributes");
         attributes.forEach((att) => {
             newAttributesValueConfigs[att.name] = {
                 attributeName: att.name,
@@ -80,30 +79,31 @@ const GisConfigLegend = ({ uniqueValues, attribute, dataType, statistics }: GisC
             const colors = generateUniqueHexColors(4);
             // less than mean-sd, mean-sd to mean, mean to mean+sd, greater than mean+sd
             if (statistics.min && statistics.max && statistics.mean && statistics.st_dev) {
+                
                 setAttributes([
                     {
-                        name: `< ${statistics.mean - statistics.st_dev}`,
+                        name: `< ${Math.floor(statistics.mean - statistics.st_dev)}`,
                         color: colors[0],
-                        max: statistics.mean - statistics.st_dev,
+                        max: Math.floor(statistics.mean - statistics.st_dev),
                         min: Number.MIN_VALUE
                     },
                     {
-                        name: `${statistics.mean - statistics.st_dev} - ${statistics.mean}`,
+                        name: `${Math.floor(statistics.mean - statistics.st_dev)} - ${Math.floor(statistics.mean)}`,
                         color: colors[1],
                         max: statistics.mean,
-                        min: statistics.mean - statistics.st_dev
+                        min: Math.floor(statistics.mean - statistics.st_dev)
                     },
                     {
-                        name: `${statistics.mean} - ${statistics.mean + statistics.st_dev}`,
+                        name: `${statistics.mean} - ${Math.floor(statistics.mean + statistics.st_dev)}`,
                         color: colors[2],
-                        max: statistics.mean + statistics.st_dev,
+                        max: Math.floor(statistics.mean + statistics.st_dev),
                         min: statistics.mean
                     },
                     {
-                        name: `> ${statistics.mean + statistics.st_dev}`,
+                        name: `> ${Math.floor(statistics.mean + statistics.st_dev)}`,
                         color: colors[3],
                         max: Number.MAX_VALUE,
-                        min: statistics.mean + statistics.st_dev
+                        min: Math.floor(statistics.mean + statistics.st_dev)
                     }
                 ])
             }
@@ -113,7 +113,7 @@ const GisConfigLegend = ({ uniqueValues, attribute, dataType, statistics }: GisC
     return (
         <div className='flex flex-col gap-4 bg-white p-5 text-primary-blue-900'>
             <h1 className='font-bold text-xl'>Legends</h1>
-            <button onClick={handleClip} className="p-2 bg-green-500 text-white">Clip</button>
+            <button onClick={handleClip} className="p-2 bg-green-500 text-white hover:bg-green-600">Clip</button>
             <ScrollArea className="flex flex-col gap-3 h-fit max-h-[340px]">
                 {attributes.map((att, i) => (
                     <div key={i} className='flex items-center gap-3'>

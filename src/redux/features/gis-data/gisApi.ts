@@ -1,6 +1,6 @@
 import { getAuthToken, rootApi } from "@/redux/root.api";
 import { SearchParamsI } from "@/typing";
-import { CollectionFilter, GetAllGeoJson, GisAllFileResponseI, IGisPropertiesResponse } from "./gis";
+import { CollectionFilter, GetAllGeoJson, GisAllFileResponseI, IGisPropertiesResponse, SpecificGeojsonResponse } from "./gis";
 import { BASE_API_URL } from "@/lib/urlConfig";
 
 // Function to fetch data from an API
@@ -94,9 +94,16 @@ export const gisApi = rootApi.injectEndpoints({
         getSingleGisFileJson: builder.query<GetAllGeoJson, { id: string, page?: number, per_page?: number }>({
             query: ({ id }) => ({
                 url: `/gis-file-upload/${id}/?page=${"all"}`,
-                // url: `/gis-file-upload/${id}/?page=${page || 1}&per_page=${per_page || 10}`,
             }),
             providesTags: ["gis-data"],
+        }),
+        getGisSpecificGeojson: builder.mutation<GetAllGeoJson, { id: string, page?: number, per_page?: number, body: SpecificGeojsonResponse }>({
+            query: ({ id, body }) => ({
+                url: `/gis-file-upload/${id}/filter/?page=${"all"}`,
+                method: "POST",
+                body
+            }),
+            invalidatesTags: ["gis-data"],
         }),
         postGisFile: builder.mutation<any, FormData>({
             query: (formData) => ({
@@ -164,5 +171,6 @@ export const {
     useGetGisPropertiesQuery,
     useGetCollectionFilterMutation,
     useGetCollectionAttributeMutation,
-    useGetAttributeUniqueValueMutation
+    useGetAttributeUniqueValueMutation,
+    useGetGisSpecificGeojsonMutation
 } = gisApi;

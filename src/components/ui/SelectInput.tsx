@@ -37,9 +37,8 @@ export const SelectInput: React.FC<SelectInputProps> = ({ options, onSelect, cla
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState(defaultValue || "")
 
-
     const handleSelect = (currentValue: string) => {
-        const option = options.find(el => el.value.toLowerCase() === currentValue.toLocaleLowerCase());
+        const option = options.find(el => el.value.toLowerCase() === currentValue.toLowerCase());
         if (option) {
             onSelect(option);
         }

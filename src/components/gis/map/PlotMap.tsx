@@ -18,7 +18,6 @@ const PlotMap = ({ features }: PlotMapProps) => {
     const { color: gisColor, fill, outline } = useAppSelector(state => state.gisSetting);
     const { attributeValueConfig } = useAppSelector(state => state.gis);
     const attributeValueConfigData = useMemo(() => attributeValueConfig, [attributeValueConfig])
-    console.log(attributeValueConfigData, "attributeValueConfigData");
 
     // highlight polygon on click
     const highlightPloygon = (e) => {
@@ -72,7 +71,7 @@ const PlotMap = ({ features }: PlotMapProps) => {
 
                         if(typeof attributeValue === "number"){
                             attributeValueConfigData?.values && Object.entries(attributeValueConfigData.values).forEach(([_,item]) => {
-                                if((item.min && item?.max) && (attributeValue > item.min && attributeValue < item.max)){
+                                if((item.min && item?.max) && (attributeValue > item.min && attributeValue <= item.max)){
                                     addColor = true;
                                     customColor = item.color;
                                 }

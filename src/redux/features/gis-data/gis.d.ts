@@ -87,3 +87,12 @@ interface Attribute {
 export interface CollectionFilter {
   [key: string]: Attribute;
 }
+
+
+// specific geo json 
+export interface SpecificGeojsonResponse {
+  key: string;
+  data_type: string;
+  value: string;
+  cond: string;
+}

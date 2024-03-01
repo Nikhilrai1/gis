@@ -37,8 +37,7 @@ const GisConfig = ({ isOpen }: GisConfigProps) => {
             getAatributeUniqueValue({ collection: gisData?.properties_col_name || "", attribute })
             getCollectionFilter({ collection: gisData?.properties_col_name || "" });
         }
-    }, [attribute])
-
+    }, [attribute,gisData?.geojson])
 
     return (
         <div className="absolute z-[20] right-0 top-0 h-full flex overflow-hidden">
@@ -53,7 +52,7 @@ const GisConfig = ({ isOpen }: GisConfigProps) => {
                         transition={{ duration: 0.2 }}
                     >
                         <div className={`h-full  flex flex-col gap-5`}>
-                            <h1 className='text-xl font-bold text-slate-200 border-b border-slate-800 pb-1'>Filter Bar</h1>
+                            <h1 className='text-xl font-bold text-slate-200 border-b border-slate-800 pb-1'>Config Bar</h1>
                             <div className='flex items-center gap-3'>
                                 <h1 className='flex-1 border-slate-800 pb-0.5 text-slate-200 border-b'>Attribute</h1>
                             </div>
