@@ -1,4 +1,5 @@
-import { SelectTypeI } from "./common";
+import { ChartTypeEnum } from "@/enums";
+import { SelectTypeI } from "@/typing";
 
 export const ChartTypes: SelectTypeI[] = [
   { label: "Bar Chart", value: "BAR" },
@@ -8,12 +9,12 @@ export const OperationTypes: SelectTypeI[] = [
   { label: "Count", value: "Count" },
 ];
 
-export enum ChartTypeEnum {
-  BAR = "bar",
-  LINE = "line",
-  PIE = "pie",
-  DOUGHNUT = "doughnut",
-}
+// export enum ChartTypeEnum {
+//   BAR = "bar",
+//   LINE = "line",
+//   PIE = "pie",
+//   DOUGHNUT = "doughnut",
+// }
 
 export const chartTypeFinder = (keyword: string) => {
   const upperCaseKeyword = keyword.toUpperCase();

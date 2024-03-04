@@ -1,7 +1,10 @@
+import ChartDiagram from '@/components/chart/ChartDiagram'
 
 const ChartPage = () => {
   return (
-    <div>ChartPage</div>
+    <div className='page-style'>
+      <ChartDiagram />
+    </div>
   )
 }
 

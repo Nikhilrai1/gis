@@ -1,4 +1,4 @@
-import { ChartTypeEnum } from "../chart/chart";
+import { ChartTypeEnum } from "@/enums";
 
 export const randomRgbColorGenerator = (): string => {
   const R = Math.floor(Math.random() * 256);

@@ -5,7 +5,7 @@ import { SelectInput } from '@/components/ui/SelectInput';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { useForm } from 'react-hook-form';
 import { showToast } from '@/lib/Toast';
-import { initGisFileData, initSpecificGisFileData } from '@/redux/features/gis-data/gisDataSlice';
+import { initSpecificGisFileData } from '@/redux/features/gis-data/gisDataSlice';
 import { ErrorPayload } from '@/typing';
 
 
