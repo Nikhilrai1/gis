@@ -32,8 +32,8 @@ const ChartWrapper = ({ type, data, title }: PropsI) => {
   return (
     <div className="p-5 border border-solid  border-slate-200 rounded-md shadow-md">
       <h1 className="text-center font-bold mb-5">
-        <span className="uppercase">{type}</span> Chart
         <span className="capitalize">{title}</span>
+        {/* <span className="uppercase">{type}{" "}</span> */}
       </h1>
       <div className="w-full  flex justify-center items-center p-8">
         {getChartComponent(type, data, initialChartOptions)}

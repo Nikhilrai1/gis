@@ -1,5 +1,6 @@
 import EmptyFormTemplate from "@/components/form-template/EmptyFormTemplate";
 import ChartPage from "@/pages/protected/chart/ChartPage";
+import ChartViewPage from "@/pages/protected/chart/ChartViewPage";
 import Dashboard from "@/pages/protected/dashboard/Dashboard";
 import CreateGisFormTemplate from "@/pages/protected/form/gis-form-template/CreateGisFormTemplate";
 import GisFormTemplates from "@/pages/protected/form/gis-form-template/GisFormTemplates";
@@ -31,6 +32,14 @@ const ChildRoutes = [
   {
     path: "chart",
     element: <ChartPage />,
+  },
+  {
+    path: "chart/Create",
+    element: <ChartPage />,
+  },
+  {
+    path: "chart/:id",
+    element: <ChartViewPage />,
   },
   {
     path: "info",

@@ -1,18 +1,18 @@
-import { useSearchParams } from "react-router-dom";
-
 import { useEffect, useState } from "react";
 import { ChartData } from "chart.js";
 import { ChartTypeEnum } from "@/enums";
 import ChartWrapper from "@/components/chart/ChartWrapper";
 import { useRetrieveChartQuery } from "@/redux/features/chart/chartApi";
 import { dummyChartData } from "@/utils/chart/dummyChartData";
-import { chartTypeFinder } from "@/utils/chart/chart";
-import { createBackgroundColor } from "@/utils/helpers/random-color-generator";
 import BounceLoader from "../loader/BounceLoader";
+import { createBackgroundColor } from "@/utils/helpers/random-color-generator";
+import { chartTypeFinder } from "@/utils/chart/chart";
 
-const ChartDiagram = () => {
-    const [searchParams] = useSearchParams();
-    const chartId = searchParams.get("id");
+
+interface ChartDiagramProps {
+    chartId: string;
+}
+const ChartDiagram = ({ chartId }: ChartDiagramProps) => {
 
     // STATE
     const [chartDataSet, setChartDataSet] = useState<ChartData>(dummyChartData);
@@ -23,8 +23,9 @@ const ChartDiagram = () => {
         chartId: chartId || "",
     });
 
+    console.log("chartData", chartData)
 
-    // USE EFFECT
+    // // USE EFFECT
     useEffect(() => {
         if (chartData?.total) {
             const dataSet: ChartData = {
@@ -54,26 +55,11 @@ const ChartDiagram = () => {
             {isLoading ? (
                 <BounceLoader />
             ) : (
-                <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-20 p-8">
+                <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-20">
                     <ChartWrapper
-                        type={ChartTypeEnum.BAR}
+                        type={chartType}
                         data={chartDataSet}
-                        title={chartData?.chart_details.form_field || ""}
-                    />
-                    <ChartWrapper
-                        type={ChartTypeEnum.LINE}
-                        data={chartDataSet}
-                        title={chartData?.chart_details.form_field || ""}
-                    />
-                    <ChartWrapper
-                        type={ChartTypeEnum.DOUGHNUT}
-                        data={chartDataSet}
-                        title={chartData?.chart_details.form_field || ""}
-                    />
-                    <ChartWrapper
-                        type={ChartTypeEnum.PIE}
-                        data={chartDataSet}
-                        title={chartData?.chart_details.form_field || ""}
+                        title={chartData?.chart_details.title || ""}
                     />
                 </div>
             )}

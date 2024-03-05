@@ -1,9 +1,9 @@
-import ChartDiagram from '@/components/chart/ChartDiagram'
+import ChartsList from '@/components/chart/chartsList';
 
 const ChartPage = () => {
   return (
     <div className='page-style'>
-      <ChartDiagram />
+     <ChartsList />
     </div>
   )
 }
