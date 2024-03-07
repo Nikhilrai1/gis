@@ -1,12 +1,17 @@
 import { ChartTypeEnum } from "@/enums";
-import { ChartData, ChartOptions } from "chart.js";
+import { ActiveElement, ChartData, ChartEvent, ChartOptions } from "chart.js";
 import { Bar, Doughnut, Line, Pie } from "react-chartjs-2";
+import { ChartType } from "./ChartDiagram";
 
 export function getChartComponent(
   type: ChartTypeEnum,
   data: ChartData,
-  option: ChartOptions
+  option: ChartOptions ,
+  handleChangeColor: (chartEvent: ChartEvent, elements: ActiveElement[], chart: ChartType) => void
 ) {
+
+  option.onClick = handleChangeColor;
+
   switch (type) {
     case ChartTypeEnum.BAR:
       return (
