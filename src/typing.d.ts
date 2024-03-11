@@ -12,7 +12,7 @@ export interface SelectTypeI {
 
 export interface SearchParamsI {
   search?: string;
-  page: number;
+  page: number | string;
   per_page: number | string;
   filter?: DynamicObjectArrayType | null;
 }

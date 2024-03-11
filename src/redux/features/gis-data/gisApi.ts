@@ -134,6 +134,13 @@ export const gisApi = rootApi.injectEndpoints({
             }),
             providesTags: ["gis-data"],
         }),
+
+        getGisDataProperties: builder.query<IGisPropertiesResponse, { id: string; params: SearchParamsI }>({
+            query: ({ id, params: { search, page, per_page } }) => ({
+                url: `/gis-file-upload/${id}/data-properties/?search=${search}&page=${page}&per_page=${per_page}`,
+            }),
+            providesTags: ["gis-data"],
+        }),
         getCollectionAttribute: builder.mutation<string[], { collection: string }>({
             query: ({ collection }) => ({
                 url: `/collection-atrributes/`,
@@ -172,5 +179,6 @@ export const {
     useGetCollectionFilterMutation,
     useGetCollectionAttributeMutation,
     useGetAttributeUniqueValueMutation,
-    useGetGisSpecificGeojsonMutation
+    useGetGisSpecificGeojsonMutation,
+    useGetGisDataPropertiesQuery
 } = gisApi;

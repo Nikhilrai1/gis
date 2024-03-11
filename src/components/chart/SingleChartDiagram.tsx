@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ActiveElement, BubbleDataPoint, Chart, ChartData, ChartEvent, ChartTypeRegistry, Point } from "chart.js";
 import { ChartTypeEnum } from "@/enums";
 import ChartWrapper from "@/components/chart/ChartWrapper";
-import { useRetrieveChartQuery } from "@/redux/features/chart/chartApi";
+import { LineChartResponse } from "@/redux/features/chart/chartApi";
 import { dummyChartData } from "@/utils/chart/dummyChartData";
 import BounceLoader from "../loader/BounceLoader";
 import { chartTypeFinder } from "@/utils/chart/chart";
@@ -10,23 +10,20 @@ import { generateUniqueHexColors } from "@/utils/map/uniqueColorsGenerator";
 import { useAppSelector } from "@/redux/store";
 
 export type ChartType = Chart<keyof ChartTypeRegistry, (number | [number, number] | Point | BubbleDataPoint | null)[], unknown>;
-interface ChartDiagramProps {
+interface SingleChartDiagramProps {
     chartId: string;
+    chartData?: LineChartResponse[];
 }
-const ChartDiagram = ({ chartId }: ChartDiagramProps) => {
+const SingleChartDiagram = ({ chartData }: SingleChartDiagramProps) => {
 
     // STATE
     const [chartDataSet, setChartDataSet] = useState<ChartData>(dummyChartData);
     const [chartType, setChartType] = useState<ChartTypeEnum>(ChartTypeEnum.BAR);
-    const {color} = useAppSelector(state => state.gisSetting);
+    const { color } = useAppSelector(state => state.gisSetting);
 
     // REDUX
-    const { data: chartData, isLoading } = useRetrieveChartQuery({
-        chartId: chartId || "",
-    });
+    const isLoading = false;
 
-
-    // console.log("chartData", chartDataSet);
 
 
 
@@ -48,25 +45,25 @@ const ChartDiagram = ({ chartId }: ChartDiagramProps) => {
 
     // // USE EFFECT
     useEffect(() => {
-        if (chartData?.total) {
-            const dataSet: ChartData = {
-                labels: chartData.results.map((data) => data.label),
-                datasets: [
-                    {
-                        label: chartData.chart_details.title,
-                        data: chartData.results.map((data) => data.data),
+        console
+        if (chartData && chartData?.length > 0) {
+            const newDataSet: ChartData = {
+                labels: chartData[0].label,
+                datasets: chartData?.map((data) => {
+                    return {
+                        label: "x-axis",
+                        data: data.data as any,
                         backgroundColor: generateUniqueHexColors(
-                            chartData.results.length
+                            data.data.length
                         ),
                         borderColor: "black",
                         borderWidth: 2,
-                    },
-                ],
-            };
+                    }
+                })
+            }
 
-            setChartDataSet(dataSet);
-            if (chartData.chart_details.chart)
-                setChartType(chartTypeFinder(chartData.chart_details.chart));
+            setChartDataSet(newDataSet);
+            setChartType(chartTypeFinder(ChartTypeEnum.LINE));
         }
     }, [chartData]);
 
@@ -77,11 +74,11 @@ const ChartDiagram = ({ chartId }: ChartDiagramProps) => {
             {isLoading ? (
                 <BounceLoader />
             ) : (
-                <div className="w-full grid grid-cols-1 md:grid-cols-2  gap-20">
+                <div className="w-full grid grid-cols-1   gap-20">
                     <ChartWrapper
                         type={chartType}
                         data={chartDataSet}
-                        title={chartData?.chart_details.title || ""}
+                        title={""}
                         legend={true}
                         handleChangeColor={handleChangeColor}
                     />
@@ -91,4 +88,4 @@ const ChartDiagram = ({ chartId }: ChartDiagramProps) => {
     );
 };
 
-export default ChartDiagram;
+export default SingleChartDiagram;

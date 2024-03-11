@@ -70,6 +70,18 @@ interface RetrieveChartResponseI {
   chart_details: CreateChartDTO;
 }
 
+interface LineChartRequest {
+  feature_id: string[];
+  form: string;
+  date_field: string;
+  value: string;
+}
+
+export interface LineChartResponse {
+  data: number[] | string[];
+  label: string[];
+}
+
 export const chartApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
     getFormsAndFields: builder.query<ChartFormAndFieldsI[], { gisId: string }>({
@@ -87,6 +99,14 @@ export const chartApi = rootApi.injectEndpoints({
     createChart: builder.mutation<void, CreateChartDTO>({
       query: (data) => ({
         url: `/chart/`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["chart"],
+    }),
+    createLineChart: builder.mutation<LineChartResponse, LineChartRequest>({
+      query: (data) => ({
+        url: `/line-chart/`,
         method: "POST",
         body: data,
       }),
@@ -114,5 +134,6 @@ export const {
   useGetAllChartsQuery,
   useDeleteChartMutation,
   useGetFormsAndFieldsQuery,
-  useRetrieveChartQuery
+  useRetrieveChartQuery,
+  useCreateLineChartMutation,
 } = chartApi;
