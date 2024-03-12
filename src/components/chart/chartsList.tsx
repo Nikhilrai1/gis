@@ -25,6 +25,8 @@ const ChartsList = () => {
                         subTitle="select/create charts "
                         buttonName={selectedChartType ? `Create ${selectedChartType} chart` : null}
                         buttonClick={() => setModalOpen(true)}
+                        link={"/chart/list"}
+                        linkTitle={"Saved Chart List"}
                     />
                 </div>
 

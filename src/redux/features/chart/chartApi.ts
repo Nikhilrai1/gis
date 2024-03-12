@@ -1,5 +1,6 @@
 import { rootApi } from "@/redux/root.api";
 import { SearchParamsI } from "@/typing";
+import { AllSavedLineChartResponse } from "./chart";
 
 
 
@@ -70,7 +71,7 @@ interface RetrieveChartResponseI {
   chart_details: CreateChartDTO;
 }
 
-interface LineChartRequest {
+export interface LineChartRequest {
   feature_id: string[];
   form: string;
   date_field: string;
@@ -81,6 +82,21 @@ export interface LineChartResponse {
   data: number[] | string[];
   label: string[];
 }
+
+interface SaveLineChartRequest {
+  title: string;
+  x_axis_title: string;
+  y_axis_title: string;
+  description: string;
+  image: string;
+  gis_file: string;
+  form: string;
+  x_field: string;
+  y_field: string;
+  feature_ids: string[];
+}
+
+
 
 export const chartApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -104,13 +120,27 @@ export const chartApi = rootApi.injectEndpoints({
       }),
       invalidatesTags: ["chart"],
     }),
-    createLineChart: builder.mutation<LineChartResponse, LineChartRequest>({
+    createLineChart: builder.mutation<LineChartResponse, SaveLineChartRequest>({
       query: (data) => ({
         url: `/line-chart/`,
         method: "POST",
         body: data,
       }),
       invalidatesTags: ["chart"],
+    }),
+    saveLineChart: builder.mutation<LineChartResponse, SaveLineChartRequest>({
+      query: (data) => ({
+        url: `/line-charts/`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["chart"],
+    }),
+    getAllSavedCharts: builder.query<AllSavedLineChartResponse, { gisId: string, params: SearchParamsI }>({
+      query: ({ gisId, params }) => ({
+        url: `/line-charts/?gis_file=${gisId}`,
+      }),
+      providesTags: ["chart"],
     }),
     retrieveChart: builder.query<RetrieveChartResponseI, { chartId: string }>({
       query: ({ chartId }) => ({
@@ -136,4 +166,6 @@ export const {
   useGetFormsAndFieldsQuery,
   useRetrieveChartQuery,
   useCreateLineChartMutation,
+  useSaveLineChartMutation,
+  useGetAllSavedChartsQuery
 } = chartApi;

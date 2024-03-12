@@ -1,25 +1,43 @@
-import ChartDiagram from '@/components/chart/ChartDiagram'
-import { changeColor } from '@/redux/features/gis-setting/gisSettingSlice';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { HexColorPicker } from 'react-colorful';
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { IoMdColorPalette } from "react-icons/io";
+import { useLocation, useNavigate } from 'react-router-dom'
 import PageHeader from '@/components/page/PageHeader';
-import { LineChartResponse } from '@/redux/features/chart/chartApi';
+import { LineChartRequest, LineChartResponse } from '@/redux/features/chart/chartApi';
 import SingleChartDiagram from '@/components/chart/SingleChartDiagram';
+import SingleChartSetting from './SingleChartSetting';
+import { useForm } from 'react-hook-form';
+import { useRef } from 'react';
+import html2canvas from 'html2canvas';
+
 
 const SingleChartPage = () => {
-    const { color } = useAppSelector(state => state.gisSetting);
-    const dispatch = useAppDispatch();
+
     const navigate = useNavigate();
-    // const params = useParams();
     const location = useLocation();
-    const chartData: LineChartResponse[] = location?.state;
-    console.log(chartData)
-    const changeGisColor = (newColor: string) => {
-        dispatch(changeColor(newColor))
-    }
+    const state = location?.state;
+    const chartData: LineChartResponse[] = state?.chartData;
+    const dataField: LineChartRequest = state?.dataField;
+    const form = useForm<any>();
+    const title = form.watch('title');
+    const x_title = form.watch('x_axis_title');
+    const y_title = form.watch('y_axis_title');
+    const chartRef = useRef<HTMLDivElement>(null);
+
     
+    const handleCapture = async (): Promise<string | void> => {
+        if (chartRef.current !== null) {
+            try {
+                const canvas = await html2canvas(chartRef.current);
+                // Convert canvas to base64
+                const base64Image: string = canvas.toDataURL();
+                console.log(base64Image);
+                return base64Image;
+            } catch (error) {
+                console.error('Error capturing screenshot:', error);
+            }
+        }
+    };
+    
+
+
     return (
         <div className='page-style relative flex flex-col gap-5'>
             <PageHeader title='Chart View'
@@ -27,19 +45,9 @@ const SingleChartPage = () => {
                 buttonClick={() => navigate(-1)}
             />
 
-            <div className="flex-1 flex gap-5">
-                <SingleChartDiagram chartId={""} chartData={chartData} />
-                <div className='flex flex-col gap-3 bg-primary-blue-900 p-10 h-fit rounded-lg'>
-                    <div className='flex items-center gap-3'>
-                        <span className='text-lg text-slate-200   border-slate-600'>Change Color</span>
-                        <IoMdColorPalette size={25} className='text-slate-200' />
-                    </div>
-                    <HexColorPicker
-                        className='mx-auto'
-                        color={color}
-                        onChange={changeGisColor}
-                    />
-                </div>
+            <div className="flex-1 justify-between flex flex-wrap gap-5">
+                <SingleChartDiagram chartRef={chartRef} title={title} x_title={x_title} y_title={y_title} chartId={""} chartData={chartData} />
+                <SingleChartSetting handleCapture={handleCapture} dataField={dataField} form={form} />
             </div>
         </div>
 

@@ -1,77 +1,56 @@
 import { Button } from '@/components/ui/button'
-import { useForm } from 'react-hook-form'
+import { UseFormReturn } from 'react-hook-form'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-// import { Input } from '@/components/ui/input'
-// import { useParams } from 'react-router-dom'
-import { ChipSelectInput, SelectInput } from '@/components/ui/SelectInput'
-import { useAppSelector } from '@/redux/store'
 import { showToast } from '@/lib/Toast'
 import { ErrorPayload } from '@/typing'
-import {  useCreateLineChartMutation, useGetFormsAndFieldsQuery } from '@/redux/features/chart/chartApi'
-import { useGetGisDataPropertiesQuery } from '@/redux/features/gis-data/gisApi'
+import { LineChartRequest, useSaveLineChartMutation } from '@/redux/features/chart/chartApi'
 import { useNavigate } from 'react-router-dom'
+import { Input } from '@/components/ui/input'
+import { useAppSelector } from '@/redux/store'
 
-
-const getFormFieldsOptions = (formFields: any) => {
-    const formFieldsData: { label: string, value: string }[] = [];
-    const formData: { label: string, value: string }[] = [];
-    formFields?.map(el => {
-        el?.form && formData.push(el.form);
-        el?.attributes && el?.attributes?.length > 0 && formFieldsData.push(...el.attributes);
-    });
-    return { formData, formFieldsData };
+interface SaveLineChartProps {
+    form: UseFormReturn<any, any, any>;
+    dataField: LineChartRequest;
+    handleCapture: () => Promise<string | void>;
 }
-
-
-
-interface CreateChartProps {
-    setModalOpen: (modalOpen: boolean) => void;
-}
-
-
-const CreateChart = ({ setModalOpen }: CreateChartProps) => {
-    const { gisData } = useAppSelector(state => state.gis);
-    const { data: formFieldsData } = useGetFormsAndFieldsQuery({
-        gisId: gisData?.id as string || ""
-    });
+const SaveLineChart = ({ form, dataField, handleCapture }: SaveLineChartProps) => {
     const navigate = useNavigate();
+    const [saveLineChart, { isLoading: createLoading }] = useSaveLineChartMutation();
 
-    const { formData: formDataOptions, formFieldsData: formFields } = getFormFieldsOptions(formFieldsData);
-    const form = useForm<any>();
-    // const params = useParams();
-    // const [createChart, {  }] = useCreateChartMutation();
-    const [createLineChart, { isLoading: createLoading }] = useCreateLineChartMutation();
-
-    const { data: features } = useGetGisDataPropertiesQuery({
-        id: gisData?.id as string || "",
-        params: {
-            page: "all",
-            per_page: 100,
-            search: ""
-        }
-    });
-
-    // const { gisData: currGisData } = useAppSelector(state => state.gis);
+    const { gisData: currGisData } = useAppSelector(state => state.gis);
 
     // 2. Define a submit handler.
     async function onSubmit(data: any) {
-        createLineChart(data).unwrap().then((chartData) => {
-            showToast("Create Chart Successfully.", { type: "success" });
-            setModalOpen(false)
-            navigate("/chart/single",{
-                state: {
-                    chartData,
-                    dataField: data
-                }
-            });
-        }).catch((err: ErrorPayload) => {
-            console.log(err)
-            err?.data?.errors.map(el => {
-                showToast(el.message, {
-                    type: "error",
+        const base64 = await handleCapture();
+        if(base64) {
+            saveLineChart({
+                description: "description",
+                title: data.title,
+                feature_ids: dataField.feature_id,
+                form: dataField.form,
+                x_axis_title: data.x_axis_title,
+                gis_file: currGisData?.id as string,
+                y_axis_title: data.y_axis_title,
+                image: base64,
+                x_field: dataField.date_field,
+                y_field: dataField.value,
+            }).unwrap().then((chartData) => {
+                showToast("Create Chart Successfully.", { type: "success" });
+                navigate("/chart/single", {
+                    state: chartData
+                });
+            }).catch((err: ErrorPayload) => {
+                console.log(err)
+                err?.data?.errors.map(el => {
+                    showToast(el.message, {
+                        type: "error",
+                    })
                 })
-            })
-        });
+            });
+        }
+        else {
+            alert("select image")
+        }
 
     };
 
@@ -81,12 +60,12 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <div className='grid grid-cols-1 gap-5'>
-                        {/* <FormField
+                        <FormField
                             control={form.control}
                             name={"title"}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className='capitalize flex gap-2'>Title <p className='text-red-500'>*</p> </FormLabel>
+                                    <FormLabel className='capitalize flex gap-2 text-white'>Title <p className='text-red-500'>*</p> </FormLabel>
                                     <FormControl>
                                         <Input {...field} className=' focus:ring-0 placeholder:text-xs rounded-md px-5 border' />
                                     </FormControl>
@@ -99,7 +78,7 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
                             name={"x_axis_title"}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className='capitalize flex gap-2'>X-Axis Title <p className='text-red-500'>*</p> </FormLabel>
+                                    <FormLabel className='capitalize flex gap-2 text-white'>X-Axis Title <p className='text-red-500'>*</p> </FormLabel>
                                     <FormControl>
                                         <Input {...field} className=' focus:ring-0 placeholder:text-xs rounded-md px-5 border' />
                                     </FormControl>
@@ -113,20 +92,20 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
                             name={"y_axis_title"}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className='capitalize flex gap-2'>Y-Axis Title<p className='text-red-500'>*</p> </FormLabel>
+                                    <FormLabel className='capitalize flex gap-2 text-white'>Y-Axis Title<p className='text-red-500'>*</p> </FormLabel>
                                     <FormControl>
                                         <Input {...field} className=' focus:ring-0 placeholder:text-xs rounded-md px-5 border' />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        /> */}
-                        <FormField
+                        />
+                        {/* <FormField
                             control={form.control}
                             name={"form"}
                             render={({ field }) => (
                                 <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2'>
+                                    <FormLabel className='capitalize flex gap-2 text-white'>
                                         Features
                                         <p className='text-red-500'>*</p>
                                     </FormLabel>
@@ -150,7 +129,7 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
                             name={"form"}
                             render={({ field }) => (
                                 <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2'>
+                                    <FormLabel className='capitalize flex gap-2 text-white'>
                                         Form
                                         <p className='text-red-500'>*</p>
                                     </FormLabel>
@@ -172,7 +151,7 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
                             name={"date_field"}
                             render={({ field }) => (
                                 <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2'>
+                                    <FormLabel className='capitalize flex gap-2 text-white'>
                                         Form Field
                                         <p className='text-red-500'>*</p>
                                     </FormLabel>
@@ -194,7 +173,7 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
                             name={"value"}
                             render={({ field }) => (
                                 <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2'>
+                                    <FormLabel className='capitalize flex gap-2 text-white'>
                                         Value
                                         <p className='text-red-500'>*</p>
                                     </FormLabel>
@@ -210,13 +189,13 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        />
+                        /> */}
                         {/* <FormField
                             control={form.control}
                             name={"chart"}
                             render={({ field }) => (
                                 <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2'>
+                                    <FormLabel className='capitalize flex gap-2 text-white'>
                                         Chart Type
                                         <p className='text-red-500'>*</p>
                                     </FormLabel>
@@ -238,7 +217,7 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
                             name={"operation"}
                             render={({ field }) => (
                                 <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2'>
+                                    <FormLabel className='capitalize flex gap-2 text-white'>
                                         Operation
                                         <p className='text-red-500'>*</p>
                                     </FormLabel>
@@ -257,12 +236,13 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
                         /> */}
                     </div>
 
-                    <div className='flex items-center gap-3 justify-end'>
+                    <div className='flex items-center gap-3'>
                         <Button
                             type='submit'
                             disabled={createLoading}
+                            className='w-full bg-slate-800'
                         >
-                            {createLoading ? "Creating..." : "Create"}
+                            {createLoading ? "Saving..." : "Save"}
                         </Button>
                     </div>
                 </form>
@@ -271,5 +251,5 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
     )
 }
 
-export default CreateChart
+export default SaveLineChart
 

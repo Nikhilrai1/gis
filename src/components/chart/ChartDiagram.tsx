@@ -84,6 +84,8 @@ const ChartDiagram = ({ chartId }: ChartDiagramProps) => {
                         title={chartData?.chart_details.title || ""}
                         legend={true}
                         handleChangeColor={handleChangeColor}
+                        x_title={""}
+                        y_title=""
                     />
                 </div>
             )}

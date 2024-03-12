@@ -31,18 +31,19 @@ interface PropsI {
   type: ChartTypeEnum;
   data: ChartData;
   title: string;
+  x_title: string;
+  y_title: string;
   legend: boolean;
   handleChangeColor: (chartEvent: ChartEvent, elements: ActiveElement[], chart: ChartType) => void;
 }
-const ChartWrapper = ({ type, data, title, legend, handleChangeColor }: PropsI) => {
+const ChartWrapper = ({ type, data, title, x_title, y_title, legend, handleChangeColor }: PropsI) => {
   return (
     <div className="p-5 border border-solid  border-slate-200 rounded-md shadow-md">
-      <h1 className="text-center font-bold mb-5">
-        <span className="capitalize">{title}</span>
-        {/* <span className="uppercase">{type}{" "}</span> */}
+      <h1 className="text-center font-bold mb-4 capitalize text-2xl">
+        {title}
       </h1>
-      <div className="w-full  flex justify-center items-center p-8">
-        {getChartComponent(type, data, initialChartOptions({legend}),handleChangeColor)}
+      <div className="w-full  flex justify-center items-center">
+          {getChartComponent(type, data, { ...initialChartOptions({ legend }) }, handleChangeColor)}
       </div>
     </div>
   );

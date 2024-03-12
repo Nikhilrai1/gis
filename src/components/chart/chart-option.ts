@@ -21,6 +21,7 @@ export const initialChartOptions = ({ legend = true }: { legend?: boolean }): Ch
         },
       },
     },
+    
     plugins: {
       legend: {
         position: "top" as const,

@@ -13,9 +13,13 @@ export type ChartType = Chart<keyof ChartTypeRegistry, (number | [number, number
 interface SingleChartDiagramProps {
     chartId: string;
     chartData?: LineChartResponse[];
+    title: string;
+    x_title: string;
+    y_title: string;
+    chartRef: React.RefObject<HTMLDivElement>;
 }
-const SingleChartDiagram = ({ chartData }: SingleChartDiagramProps) => {
 
+const SingleChartDiagram = ({ chartData, title, x_title, y_title, chartRef }: SingleChartDiagramProps) => {
     // STATE
     const [chartDataSet, setChartDataSet] = useState<ChartData>(dummyChartData);
     const [chartType, setChartType] = useState<ChartTypeEnum>(ChartTypeEnum.BAR);
@@ -23,8 +27,6 @@ const SingleChartDiagram = ({ chartData }: SingleChartDiagramProps) => {
 
     // REDUX
     const isLoading = false;
-
-
 
 
     // utils
@@ -39,13 +41,11 @@ const SingleChartDiagram = ({ chartData }: SingleChartDiagramProps) => {
                 newChartData.datasets[datasetIndex].backgroundColor[index] = color;
                 setChartDataSet(newChartData);
             }
-
         }
     }
 
     // // USE EFFECT
     useEffect(() => {
-        console
         if (chartData && chartData?.length > 0) {
             const newDataSet: ChartData = {
                 labels: chartData[0].label,
@@ -70,21 +70,24 @@ const SingleChartDiagram = ({ chartData }: SingleChartDiagramProps) => {
 
 
     return (
-        <>
+        <div className=" w-2/4">
+            {/* <button onClick={handleCapture}>capture</button> */}
             {isLoading ? (
                 <BounceLoader />
             ) : (
-                <div className="w-full grid grid-cols-1   gap-20">
+                <div ref={chartRef} className="w-full  gap-20">
                     <ChartWrapper
                         type={chartType}
                         data={chartDataSet}
-                        title={""}
+                        title={title}
                         legend={true}
                         handleChangeColor={handleChangeColor}
+                        x_title={x_title}
+                        y_title={y_title}
                     />
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

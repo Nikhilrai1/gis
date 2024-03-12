@@ -3,6 +3,7 @@ import { ActiveElement, ChartData, ChartEvent, ChartOptions } from "chart.js";
 import { Bar, Doughnut, Line, Pie } from "react-chartjs-2";
 import { ChartType } from "./ChartDiagram";
 
+
 export function getChartComponent(
   type: ChartTypeEnum,
   data: ChartData,
@@ -11,7 +12,6 @@ export function getChartComponent(
 ) {
 
   option.onClick = handleChangeColor;
-
   switch (type) {
     case ChartTypeEnum.BAR:
       return (
@@ -19,7 +19,7 @@ export function getChartComponent(
           options={option as ChartOptions<"bar">}
           width={300}
           height={300}
-          data={data as ChartData<"bar">}
+          data={data as ChartData<"bar">}          
         />
       );
     case ChartTypeEnum.LINE:

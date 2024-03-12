@@ -16,13 +16,13 @@ const TableHeader = ({ title, subTitle, linkTitle, link, buttonName, buttonClick
                 <h1 className="font-bold text-2xl text-theme">{title}</h1>
                 {subTitle && <p className="text-xs">{subTitle}</p>}
             </div>
-            <div>
+            <div className="flex items- gap-5">
                 {buttonName && <button onClick={() => buttonClick ? buttonClick() : {}} className='flex items-center text-xs justify-center text-white self-end p-2 bg-primary-blue-900 rounded-md'>
                     {buttonName}
                 </button>}
 
 
-                {linkTitle && <Link to={link as string} className='flex items-center justify-center text-white self-end p-2 bg-themeColor rounded-md bg-primary-blue-900'>
+                {linkTitle && <Link to={link as string} className='flex items-center text-xs justify-center text-white self-end p-2 bg-themeColor rounded-md bg-primary-blue-900'>
                     {linkTitle}
                 </Link>
                 }
