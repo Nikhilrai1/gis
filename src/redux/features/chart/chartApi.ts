@@ -83,6 +83,21 @@ export interface LineChartResponse {
   label: string[];
 }
 
+interface Filter {
+  date: Date;
+  parameter: Parameter;
+  unit: Parameter;
+}
+
+interface Parameter {
+  $eq: string;
+}
+
+interface Date {
+  $gte: string;
+  $lte: string;
+}
+
 interface SaveLineChartRequest {
   title: string;
   x_axis_title: string;
@@ -94,10 +109,18 @@ interface SaveLineChartRequest {
   x_field: string;
   y_field: string;
   feature_ids: string[];
+  filters: Filter;
 }
 
 
 
+interface CreateLineChartRequest {
+  feature_id: string[];
+  form: string;
+  date_field: string;
+  value: string;
+  filters?: Filter;
+}
 export const chartApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
     getFormsAndFields: builder.query<ChartFormAndFieldsI[], { gisId: string }>({
@@ -106,12 +129,14 @@ export const chartApi = rootApi.injectEndpoints({
       }),
       providesTags: ["chart"],
     }),
+
     getAllCharts: builder.query<AllChartResponseI, { params: SearchParamsI, gisId: string }>({
       query: ({ gisId }) => ({
         url: `/chart/?gis_file=${parseInt(gisId)}`,
       }),
       providesTags: ["chart"],
     }),
+
     createChart: builder.mutation<void, CreateChartDTO>({
       query: (data) => ({
         url: `/chart/`,
@@ -120,7 +145,8 @@ export const chartApi = rootApi.injectEndpoints({
       }),
       invalidatesTags: ["chart"],
     }),
-    createLineChart: builder.mutation<LineChartResponse, SaveLineChartRequest>({
+
+    createLineChart: builder.mutation<LineChartResponse[], CreateLineChartRequest>({
       query: (data) => ({
         url: `/line-chart/`,
         method: "POST",
@@ -136,12 +162,14 @@ export const chartApi = rootApi.injectEndpoints({
       }),
       invalidatesTags: ["chart"],
     }),
+
     getAllSavedCharts: builder.query<AllSavedLineChartResponse, { gisId: string, params: SearchParamsI }>({
-      query: ({ gisId, params }) => ({
+      query: ({ gisId }) => ({
         url: `/line-charts/?gis_file=${gisId}`,
       }),
       providesTags: ["chart"],
     }),
+
     retrieveChart: builder.query<RetrieveChartResponseI, { chartId: string }>({
       query: ({ chartId }) => ({
         url: `/chart/${chartId}/`,

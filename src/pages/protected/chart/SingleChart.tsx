@@ -1,11 +1,13 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import PageHeader from '@/components/page/PageHeader';
-import { LineChartRequest, LineChartResponse } from '@/redux/features/chart/chartApi';
+import { LineChartRequest, LineChartResponse, useCreateLineChartMutation } from '@/redux/features/chart/chartApi';
 import SingleChartDiagram from '@/components/chart/SingleChartDiagram';
 import SingleChartSetting from './SingleChartSetting';
 import { useForm } from 'react-hook-form';
 import { useRef } from 'react';
 import html2canvas from 'html2canvas';
+import { useGetGisDataPropertiesQuery } from '@/redux/features/gis-data/gisApi';
+import { useAppSelector } from '@/redux/store';
 
 
 const SingleChartPage = () => {
@@ -20,8 +22,9 @@ const SingleChartPage = () => {
     const x_title = form.watch('x_axis_title');
     const y_title = form.watch('y_axis_title');
     const chartRef = useRef<HTMLDivElement>(null);
-
     
+
+
     const handleCapture = async (): Promise<string | void> => {
         if (chartRef.current !== null) {
             try {
@@ -35,7 +38,7 @@ const SingleChartPage = () => {
             }
         }
     };
-    
+
 
 
     return (
@@ -46,7 +49,7 @@ const SingleChartPage = () => {
             />
 
             <div className="flex-1 justify-between flex flex-wrap gap-5">
-                <SingleChartDiagram chartRef={chartRef} title={title} x_title={x_title} y_title={y_title} chartId={""} chartData={chartData} />
+                <SingleChartDiagram dataField={dataField} chartRef={chartRef} title={title} x_title={x_title} y_title={y_title} chartId={""} chartData={chartData} />
                 <SingleChartSetting handleCapture={handleCapture} dataField={dataField} form={form} />
             </div>
         </div>

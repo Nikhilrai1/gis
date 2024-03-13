@@ -165,6 +165,14 @@ export const gisApi = rootApi.injectEndpoints({
             }),
             invalidatesTags: ["gis-data"],
         }),
+        getGisCustomFilledCustom: builder.mutation<CollectionFilter, { collection: string }>({
+            query: ({ collection }) => ({
+                url: `/custom-form/froms-and-attributes/?gis_file=7`,
+                method: "POST",
+                body: { collection },
+            }),
+            invalidatesTags: ["gis-data"],
+        }),
     }),
 });
 
@@ -180,5 +188,6 @@ export const {
     useGetCollectionAttributeMutation,
     useGetAttributeUniqueValueMutation,
     useGetGisSpecificGeojsonMutation,
-    useGetGisDataPropertiesQuery
+    useGetGisDataPropertiesQuery,
+    useGetGisCustomFilledCustomMutation
 } = gisApi;

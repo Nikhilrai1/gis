@@ -37,6 +37,7 @@ interface PropsI {
   handleChangeColor: (chartEvent: ChartEvent, elements: ActiveElement[], chart: ChartType) => void;
 }
 const ChartWrapper = ({ type, data, title, x_title, y_title, legend, handleChangeColor }: PropsI) => {
+  console.log("x_title", title, x_title, y_title);
   return (
     <div className="p-5 border border-solid  border-slate-200 rounded-md shadow-md">
       <h1 className="text-center font-bold mb-4 capitalize text-2xl">
