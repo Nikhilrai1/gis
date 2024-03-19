@@ -16,20 +16,20 @@ interface LineChartCreateCarouselProps {
 }
 export function LineChartCreateCarousel({ components }: LineChartCreateCarouselProps) {
     const [api, setApi] = React.useState<CarouselApi>()
-    const [current, setCurrent] = React.useState(0)
-    const [count, setCount] = React.useState(0)
+    // const [current, setCurrent] = React.useState(0)
+    // const [count, setCount] = React.useState(0)
 
     React.useEffect(() => {
         if (!api) {
             return
         }
 
-        setCount(api.scrollSnapList().length)
-        setCurrent(api.selectedScrollSnap() + 1)
+        // setCount(api.scrollSnapList().length)
+        // setCurrent(api.selectedScrollSnap() + 1)
 
-        api.on("select", () => {
-            setCurrent(api.selectedScrollSnap() + 1)
-        })
+        // api.on("select", () => {
+        //     setCurrent(api.selectedScrollSnap() + 1)
+        // })
     }, [api])
 
     return (

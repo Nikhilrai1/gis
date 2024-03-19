@@ -35,6 +35,7 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
 
     const { formData: formDataOptions, formFieldsData: formFields } = getFormFieldsOptions(formFieldsData);
     const form = useForm<any>();
+    console.log(formDataOptions)
 
     const { data: features } = useGetGisDataPropertiesQuery({
         id: gisData?.id as string || "",
@@ -71,8 +72,11 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
             return;
         }
         setModalOpen(false);
-        navigate("/chart/single")
-
+        navigate("/chart/single", {
+            state: {
+                dataField: data
+            }
+        });
     };
 
 
@@ -118,7 +122,11 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
                                         <SelectInput
                                             {...field}
                                             defaultValue={form.watch("form")}
-                                            onSelect={(option) => form.setValue("form" || "", option.value)}
+                                            onSelect={(option) => {
+                                                form.setValue("form" || "", option.value);
+                                                //@ts-ignore
+                                                form.setValue("collection_name", formDataOptions?.find(el => el.value === option.value)?.collection_name)
+                                            }}
                                             placeholder='Select Form'
                                             options={(formDataOptions?.length > 0) ? formDataOptions : []}
                                         />

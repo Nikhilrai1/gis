@@ -4,7 +4,6 @@ import TableHeader from "../table/pagination-table/utils/TableHeader";
 import CreateChart from "./CreateChart";
 import { chartsList } from "@/utils/chart/chartsList";
 import { ChartTypeEnum } from "@/enums";
-import { LineChartCreateCarousel } from "./chartcarousel/LineChartCreateCarousel";
 
 
 const ChartPreview = () => {
@@ -41,7 +40,6 @@ const ChartPreview = () => {
                     ))}
                 </div>
 
-                {/* <LineChartCreateCarousel /> */}
 
 
             </div >

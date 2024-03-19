@@ -76,6 +76,7 @@ export interface LineChartRequest {
   form: string;
   date_field: string;
   value: string;
+  collection_name: string;
 }
 
 export interface LineChartResponse {
@@ -111,6 +112,24 @@ interface SaveLineChartRequest {
   feature_ids: string[];
 }
 
+export interface LineChartFilterType {
+  dropdowns: Dropdown[];
+  range_filters: Rangefilter[];
+}
+
+interface Rangefilter {
+  key: string;
+  data_type: string;
+  gte: string;
+  lte: string;
+}
+
+interface Dropdown {
+  key: string;
+  data_type: string;
+  value: string;
+  operators: string;
+}
 
 
 interface CreateLineChartRequest {
@@ -118,7 +137,7 @@ interface CreateLineChartRequest {
   form: string;
   date_field: string;
   value: string;
-  filters?: Filter;
+  filters?: LineChartFilterType;
 }
 export const chartApi = rootApi.injectEndpoints({
   endpoints: (builder) => ({
