@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import AuthNavbar from "../dashboard/navbar/AuthNavbar";
-import AuthSidebar from "../dashboard/sidebar/AuthSidebar";
 import { useAppSelector } from "@/redux/store";
 import GisDataList from "../gis/GisDataList";
 import { InitialSelectGisDataModal } from "../modal/InitialSelectGisDataModal";
@@ -13,7 +12,7 @@ export default function MainLayout() {
                 <div className='w-full'>
                     <AuthNavbar />
                     <div className="flex mt-[107px]">
-                       <AuthSidebar />
+                       {/* <AuthSidebar /> */}
                         <div className={`w-full bg-gray-100`}>
                             <Outlet />
                         </div>

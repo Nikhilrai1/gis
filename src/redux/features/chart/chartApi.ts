@@ -1,6 +1,6 @@
 import { rootApi } from "@/redux/root.api";
 import { SearchParamsI } from "@/typing";
-import { AllSavedLineChartResponse } from "./chart";
+import { AllSavedLineChartResponse, GetChartFilter } from "./chart";
 
 
 
@@ -109,7 +109,6 @@ interface SaveLineChartRequest {
   x_field: string;
   y_field: string;
   feature_ids: string[];
-  filters: Filter;
 }
 
 
@@ -184,6 +183,14 @@ export const chartApi = rootApi.injectEndpoints({
       }),
       invalidatesTags: ["chart"],
     }),
+    getChartsFilter: builder.mutation<GetChartFilter, { collection: string }>({
+      query: (data) => ({
+        url: `/filterable-fields/`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["chart"],
+    }),
   }),
 });
 
@@ -195,5 +202,6 @@ export const {
   useRetrieveChartQuery,
   useCreateLineChartMutation,
   useSaveLineChartMutation,
-  useGetAllSavedChartsQuery
+  useGetAllSavedChartsQuery,
+  useGetChartsFilterMutation,
 } = chartApi;

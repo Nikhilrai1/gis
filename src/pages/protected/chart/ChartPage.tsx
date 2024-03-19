@@ -1,9 +1,9 @@
-import ChartsList from '@/components/chart/chartsList';
+import ChartPreview from "@/components/chart/ChartPreview"
 
 const ChartPage = () => {
   return (
     <div className='page-style'>
-     <ChartsList />
+     <ChartPreview />
     </div>
   )
 }

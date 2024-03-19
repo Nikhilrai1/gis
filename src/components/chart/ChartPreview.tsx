@@ -4,13 +4,13 @@ import TableHeader from "../table/pagination-table/utils/TableHeader";
 import CreateChart from "./CreateChart";
 import { chartsList } from "@/utils/chart/chartsList";
 import { ChartTypeEnum } from "@/enums";
+import { LineChartCreateCarousel } from "./chartcarousel/LineChartCreateCarousel";
 
 
-const ChartsList = () => {
+const ChartPreview = () => {
     // state
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [selectedChartType, SetSelectedChartType] = useState<ChartTypeEnum>();
-
 
     const handleSelectChart = (type: ChartTypeEnum) => {
         SetSelectedChartType(type);
@@ -25,8 +25,6 @@ const ChartsList = () => {
                         subTitle="select/create charts "
                         buttonName={selectedChartType ? `Create ${selectedChartType} chart` : null}
                         buttonClick={() => setModalOpen(true)}
-                        link={"/chart/list"}
-                        linkTitle={"Saved Chart List"}
                     />
                 </div>
 
@@ -43,6 +41,8 @@ const ChartsList = () => {
                     ))}
                 </div>
 
+                {/* <LineChartCreateCarousel /> */}
+
 
             </div >
             <Modal
@@ -57,5 +57,5 @@ const ChartsList = () => {
 }
 
 
-export default ChartsList;
+export default ChartPreview;
 

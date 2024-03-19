@@ -17,8 +17,8 @@ export function getChartComponent(
       return (
         <Bar
           options={option as ChartOptions<"bar">}
-          width={300}
-          height={300}
+          width={1000}
+          height={325}
           data={data as ChartData<"bar">}          
         />
       );
@@ -26,8 +26,8 @@ export function getChartComponent(
       return (
         <Line
           options={option as ChartOptions<"line">}
-          width={300}
-          height={300}
+          width={1000}
+          height={325}
           data={data as ChartData<"line">}
         />
       );
@@ -35,8 +35,8 @@ export function getChartComponent(
       return (
         <Pie
           options={option as ChartOptions<"pie">}
-          width={300}
-          height={300}
+          width={1000}
+          height={325}
           data={data as ChartData<"pie">}
         />
       );
@@ -44,8 +44,8 @@ export function getChartComponent(
       return (
         <Doughnut
           options={option as ChartOptions<"doughnut">}
-          width={300}
-          height={300}
+          width={1000}
+          height={325}
           data={data as ChartData<"doughnut">}
         />
       );

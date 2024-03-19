@@ -77,7 +77,7 @@ const ChartDiagram = ({ chartId }: ChartDiagramProps) => {
             {isLoading ? (
                 <BounceLoader />
             ) : (
-                <div className="w-full grid grid-cols-1 md:grid-cols-2  gap-20">
+                <div className="w-full grid grid-cols-1  gap-20">
                     <ChartWrapper
                         type={chartType}
                         data={chartDataSet}

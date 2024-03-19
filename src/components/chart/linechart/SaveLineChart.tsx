@@ -13,6 +13,7 @@ interface SaveLineChartProps {
     dataField: LineChartRequest;
     handleCapture: () => Promise<string | void>;
 }
+
 const SaveLineChart = ({ form, dataField, handleCapture }: SaveLineChartProps) => {
     const navigate = useNavigate();
     const [saveLineChart, { isLoading: createLoading }] = useSaveLineChartMutation();
@@ -100,140 +101,6 @@ const SaveLineChart = ({ form, dataField, handleCapture }: SaveLineChartProps) =
                                 </FormItem>
                             )}
                         />
-                        {/* <FormField
-                            control={form.control}
-                            name={"form"}
-                            render={({ field }) => (
-                                <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2 text-white'>
-                                        Features
-                                        <p className='text-red-500'>*</p>
-                                    </FormLabel>
-                                    <FormControl>
-                                        <ChipSelectInput
-                                            {...field}
-                                            onSelect={(options) => form.setValue("feature_id" || "", options.map(el => el.value))}
-                                            placeholder='Select Feature'
-                                            options={(features?.results && features?.results?.length > 0) ? features?.results?.map(el => ({
-                                                label: el?.feature_id || "",
-                                                value: el?.feature_id || ""
-                                            })) : []}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name={"form"}
-                            render={({ field }) => (
-                                <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2 text-white'>
-                                        Form
-                                        <p className='text-red-500'>*</p>
-                                    </FormLabel>
-                                    <FormControl>
-                                        <SelectInput
-                                            {...field}
-                                            defaultValue={form.watch("form")}
-                                            onSelect={(option) => form.setValue("form" || "", option.value)}
-                                            placeholder='Select Form'
-                                            options={(formDataOptions?.length > 0) ? formDataOptions : []}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name={"date_field"}
-                            render={({ field }) => (
-                                <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2 text-white'>
-                                        Form Field
-                                        <p className='text-red-500'>*</p>
-                                    </FormLabel>
-                                    <FormControl>
-                                        <SelectInput
-                                            {...field}
-                                            defaultValue={form.watch("date_field")}
-                                            onSelect={(option) => form.setValue("date_field" || "", option.value)}
-                                            placeholder='Select Form Field'
-                                            options={(formFields?.length > 0) ? formFields : []}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                         <FormField
-                            control={form.control}
-                            name={"value"}
-                            render={({ field }) => (
-                                <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2 text-white'>
-                                        Value
-                                        <p className='text-red-500'>*</p>
-                                    </FormLabel>
-                                    <FormControl>
-                                        <SelectInput
-                                            {...field}
-                                            defaultValue={form.watch("value")}
-                                            onSelect={(option) => form.setValue("value" || "", option.value)}
-                                            placeholder='Select Form field value'
-                                            options={(formFields?.length > 0) ? formFields : []}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        /> */}
-                        {/* <FormField
-                            control={form.control}
-                            name={"chart"}
-                            render={({ field }) => (
-                                <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2 text-white'>
-                                        Chart Type
-                                        <p className='text-red-500'>*</p>
-                                    </FormLabel>
-                                    <FormControl>
-                                        <SelectInput
-                                            {...field}
-                                            defaultValue={form.watch("chart")}
-                                            onSelect={(option) => form.setValue("chart" || "", option.value)}
-                                            placeholder='Select chart type'
-                                            options={chartsOptions}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        /> */}
-                        {/* <FormField
-                            control={form.control}
-                            name={"operation"}
-                            render={({ field }) => (
-                                <FormItem className='xl:pr-5'>
-                                    <FormLabel className='capitalize flex gap-2 text-white'>
-                                        Operation
-                                        <p className='text-red-500'>*</p>
-                                    </FormLabel>
-                                    <FormControl>
-                                        <SelectInput
-                                            {...field}
-                                            defaultValue={form.watch("operation")}
-                                            onSelect={(option) => form.setValue("operation" || "", option.value)}
-                                            placeholder='Select Operation'
-                                            options={[{ label: "Count", value: "Count" }]}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        /> */}
                     </div>
 
                     <div className='flex items-center gap-3'>

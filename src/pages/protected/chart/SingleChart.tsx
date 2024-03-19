@@ -1,13 +1,12 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import PageHeader from '@/components/page/PageHeader';
-import { LineChartRequest, LineChartResponse, useCreateLineChartMutation } from '@/redux/features/chart/chartApi';
+import { LineChartRequest, LineChartResponse } from '@/redux/features/chart/chartApi';
 import SingleChartDiagram from '@/components/chart/SingleChartDiagram';
 import SingleChartSetting from './SingleChartSetting';
 import { useForm } from 'react-hook-form';
 import { useRef } from 'react';
 import html2canvas from 'html2canvas';
-import { useGetGisDataPropertiesQuery } from '@/redux/features/gis-data/gisApi';
-import { useAppSelector } from '@/redux/store';
+import { LineChartCreateCarousel } from '@/components/chart/chartcarousel/LineChartCreateCarousel';
 
 
 const SingleChartPage = () => {
@@ -22,7 +21,7 @@ const SingleChartPage = () => {
     const x_title = form.watch('x_axis_title');
     const y_title = form.watch('y_axis_title');
     const chartRef = useRef<HTMLDivElement>(null);
-    
+
 
 
     const handleCapture = async (): Promise<string | void> => {
@@ -49,8 +48,18 @@ const SingleChartPage = () => {
             />
 
             <div className="flex-1 justify-between flex flex-wrap gap-5">
-                <SingleChartDiagram dataField={dataField} chartRef={chartRef} title={title} x_title={x_title} y_title={y_title} chartId={""} chartData={chartData} />
-                <SingleChartSetting handleCapture={handleCapture} dataField={dataField} form={form} />
+                {/* <SingleChartDiagram dataField={dataField} chartRef={chartRef} title={title} x_title={x_title} y_title={y_title} chartId={""} chartData={chartData} /> */}
+                <LineChartCreateCarousel
+                    components={[
+                        {
+                            children: <SingleChartSetting handleCapture={handleCapture} dataField={dataField} form={form} />,
+                        },
+                        {
+                            children: <SingleChartDiagram dataField={dataField} chartRef={chartRef} title={title} x_title={x_title} y_title={y_title} chartId={""} chartData={chartData} />,
+                        }
+                    ]}
+                />
+                {/* <SingleChartSetting handleCapture={handleCapture} dataField={dataField} form={form} /> */}
             </div>
         </div>
 

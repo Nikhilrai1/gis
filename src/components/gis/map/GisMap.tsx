@@ -14,7 +14,7 @@ function GisMap({ geoJsonFeature }: GisMapProps) {
 
   return (
     <div className="relative">
-      <MapContainer zoom={7} center={nepalCenterPos}>
+      <MapContainer  zoom={7} center={nepalCenterPos}>
         {geoJsonFeature && geoJsonFeature.length > 0 &&
           <PlotMap
             features={geoJsonFeature}
