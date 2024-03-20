@@ -62,49 +62,6 @@ const SingleChartDiagram = ({ title, x_title, y_title, chartRef, chartData, char
         }
     }, [chartData]);
 
-
-
-    // async function onSubmit(data: any) {
-    //     createLineChart({
-    //         form: dataField?.form || "",
-    //         date_field: dataField?.date_field || "",
-    //         feature_id: dataField?.feature_id || [],
-    //         value: dataField?.value || "",
-    //         filters: {
-    //             date: {
-    //                 $gte: data.from || "",
-    //                 $lte: data.to || ""
-    //             },
-    //             parameter: {
-    //                 $eq: "ppt"
-    //             },
-    //             unit: {
-    //                 $eq: "mm"
-    //             }
-    //         }
-    //     }).unwrap().then(chart => {
-    //         if (chart && chart?.length > 0) {
-    //             const newDataSet: ChartData = {
-    //                 labels: chart[0].label,
-    //                 datasets: chart?.map((data) => {
-    //                     return {
-    //                         label: "x-axis",
-    //                         data: data.data as any,
-    //                         backgroundColor: generateUniqueHexColors(
-    //                             data.data.length
-    //                         ),
-    //                         borderColor: "black",
-    //                         borderWidth: 2,
-    //                     }
-    //                 })
-    //             }
-
-    //             setChartDataSet(newDataSet);
-    //             setChartType(chartTypeFinder(ChartTypeEnum.LINE));
-    //         }
-    //     })
-    // };
-
     return (
         <div className="w-full">
             <div ref={chartRef} className="w-full  gap-20">

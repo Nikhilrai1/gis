@@ -13,7 +13,7 @@ export default function MainLayout() {
                     <AuthNavbar />
                     <div className="flex mt-[107px]">
                        {/* <AuthSidebar /> */}
-                        <div className={`w-full bg-gray-100`}>
+                        <div className={`w-full`}>
                             <Outlet />
                         </div>
                     </div>

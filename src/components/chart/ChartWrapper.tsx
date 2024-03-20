@@ -38,7 +38,7 @@ interface PropsI {
 }
 const ChartWrapper = ({ type, data, title, legend, handleChangeColor }: PropsI) => {
   return (
-    <div className="p-5 border border-solid  border-slate-200 rounded-md shadow-md w-full">
+    <div className="p-5 border border-solid  border-slate-200 rounded-md  w-full">
       <h1 className="text-center font-bold mb-4 capitalize text-2xl">
         {title}
       </h1>

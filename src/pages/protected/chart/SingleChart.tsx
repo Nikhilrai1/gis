@@ -5,9 +5,10 @@ import SingleChartDiagram from '@/components/chart/SingleChartDiagram';
 import { useForm } from 'react-hook-form';
 import { useEffect, useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
-import { Settings } from 'lucide-react';
+import { SaveAll, SaveIcon, Settings } from 'lucide-react';
 import SingleChartSetting from './SingleChartSetting';
 import { AnimatePresence, motion } from 'framer-motion';
+import BounceLoader from '@/components/loader/BounceLoader';
 
 
 const SingleChartPage = () => {
@@ -26,9 +27,8 @@ const SingleChartPage = () => {
     const [showSettings, setShowSettings] = useState<boolean>(false);
 
     useEffect(() => {
-        console.log(chartData)
         setChartData(newChartData);
-    },[newChartData])
+    }, [newChartData])
 
     const handleCapture = async (): Promise<string | void> => {
         if (chartRef.current !== null) {
@@ -36,17 +36,31 @@ const SingleChartPage = () => {
                 const canvas = await html2canvas(chartRef.current);
                 // Convert canvas to base64
                 const base64Image: string = canvas.toDataURL();
-                console.log(base64Image);
                 return base64Image;
             } catch (error) {
                 console.error('Error capturing screenshot:', error);
             }
         }
     };
+    const downloadImage = async () => {
+        try {
+            const base64Image = await handleCapture();
+            if (base64Image) {
+                // Create a temporary anchor element
+                const downloadLink = document.createElement('a');
+                downloadLink.href = base64Image;
+                downloadLink.download = 'chart_image.png'; // Set the filename for download
+                // Simulate click on the anchor element to trigger download
+                downloadLink.click();
+            }
+        } catch (error) {
+            console.error('Error downloading image:', error);
+        }
+    };
 
 
     return (
-        <div className='page-style relative flex flex-col gap-5'>
+        <div className='page-style relative flex flex-col gap-5 h-full'>
             <PageHeader title='Chart View'
                 buttonName={"Back"}
                 buttonClick={() => navigate(-1)}
@@ -56,10 +70,13 @@ const SingleChartPage = () => {
                     </>
                 }
                 extraButtonClick={() => setShowSettings(prev => !prev)}
+                utilButtonName={
+                    <>
+                        <SaveIcon size={25} />
+                    </>
+                }
+                utilButonClick={downloadImage}
             />
-            <div>
-
-            </div>
 
             <AnimatePresence>
                 {showSettings && (
@@ -83,7 +100,7 @@ const SingleChartPage = () => {
             </AnimatePresence>
 
             <div className="flex-1 justify-between flex flex-wrap gap-5 h-fit">
-                <SingleChartDiagram
+                {chartData ? <SingleChartDiagram
                     chartType='LINE'
                     dataField={dataField}
                     chartRef={chartRef}
@@ -92,7 +109,7 @@ const SingleChartPage = () => {
                     y_title={y_title}
                     chartId={""}
                     chartData={chartData}
-                />
+                /> : <BounceLoader />}
             </div>
 
         </div>

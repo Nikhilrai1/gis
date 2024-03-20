@@ -50,7 +50,6 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
 
     // 2. Define a submit handler.
     async function onSubmit(data: any) {
-        console.log(data)
         createLineChart({
             gis_id: gisData?.id || "",
             ...data,
