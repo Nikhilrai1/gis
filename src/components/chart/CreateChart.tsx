@@ -35,7 +35,6 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
 
     const { formData: formDataOptions, formFieldsData: formFields } = getFormFieldsOptions(formFieldsData);
     const form = useForm<any>();
-    console.log(formDataOptions)
 
     const { data: features } = useGetGisDataPropertiesQuery({
         id: gisData?.id as string || "",
@@ -49,24 +48,6 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
 
     // 2. Define a submit handler.
     async function onSubmit(data: any) {
-        // createLineChart(data).unwrap().then((chartData) => {
-        //     showToast("Create Chart Successfully.", { type: "success" });
-        //     setModalOpen(false)
-        //     navigate("/chart/single",{
-        //         state: {
-        //             chartData,
-        //             dataField: data
-        //         }
-        //     });
-        // }).catch((err: ErrorPayload) => {
-        //     console.log(err)
-        //     err?.data?.errors.map(el => {
-        //         showToast(el.message, {
-        //             type: "error",
-        //         })
-        //     })
-        // });
-
         if (!data) {
             showToast("Please fill all required fields", { type: "info" })
             return;

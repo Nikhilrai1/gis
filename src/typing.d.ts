@@ -28,6 +28,17 @@ interface Error {
   field: string;
 }
 
+const error = {
+  data: {
+    errors: [
+      {
+        field: "",
+        message: "urgrfugr"
+      }
+    ]
+  }
+}
+
 
 // geojson type
 export interface GeoJsonPropertiesI {

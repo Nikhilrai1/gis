@@ -3,7 +3,6 @@ import { SearchParamsI } from "@/typing";
 import { AllSavedLineChartResponse, GetChartFilter } from "./chart";
 
 
-
 export interface ChartDetails {
   id: string;
   form: string;
@@ -15,6 +14,8 @@ export interface ChartDetails {
   chart: string;
 }
 
+
+
 export interface AllChartResponseI {
   current_page: number;
   total: number;
@@ -22,6 +23,7 @@ export interface AllChartResponseI {
   total_pages: number;
   results: ChartDetails[];
 }
+
 
 export interface ChartAttibuteI {
   label: string;
@@ -82,22 +84,14 @@ export interface LineChartRequest {
 export interface LineChartResponse {
   data: number[] | string[];
   label: string[];
+  property: {
+    _id: string;
+    label: string;
+    feature_id: string;
+  }
 }
 
-interface Filter {
-  date: Date;
-  parameter: Parameter;
-  unit: Parameter;
-}
 
-interface Parameter {
-  $eq: string;
-}
-
-interface Date {
-  $gte: string;
-  $lte: string;
-}
 
 interface SaveLineChartRequest {
   title: string;
@@ -133,10 +127,11 @@ interface Dropdown {
 
 
 interface CreateLineChartRequest {
+  gis_id: string | number;
   feature_id: string[];
   form: string;
-  date_field: string;
-  value: string;
+  x_field: string;
+  y_field: string;
   filters?: LineChartFilterType;
 }
 export const chartApi = rootApi.injectEndpoints({

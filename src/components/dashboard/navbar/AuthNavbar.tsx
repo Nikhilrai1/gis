@@ -10,15 +10,15 @@ import { logout } from "@/redux/features/auth/authSlice";
 import GisFileSwitcher from "@/components/gis/GisFileSwitcher";
 import { Modal } from "@/components/modal/Modal";
 import GisFileUpload from "@/components/gis/GisFileUpload";
+import GisAttributeSwitcher from "@/components/gis/GisAttributeSwitcher";
 
 const AuthNavbar = () => {
+    // STATE
     const navigate = useNavigate();
     const menuContainer = useRef(null);
     const dispatch = useAppDispatch();
     const { pathname } = useLocation();
     const [modalOpen, setModalOpen] = useState<boolean>(false);
-
-    // STATE
     const [showProfileMenu, setShowProfileMenu] = useState<boolean>(false);
     const [showNavMenu, setShowNavMenu] = useState<boolean>(false);
     const { authUser } = useAppSelector(state => state.auth);
@@ -71,6 +71,7 @@ const AuthNavbar = () => {
             </Link>
             <div className="flex gap-8 items-center" ref={menuContainer}>
                 <GisFileSwitcher onSwitch={() => setModalOpen(true)} />
+               <GisAttributeSwitcher  />
                 <CgMenuGridO
                     size={50}
                     className="cursor-pointer p-2 rounded-full hover:bg-slate-700"

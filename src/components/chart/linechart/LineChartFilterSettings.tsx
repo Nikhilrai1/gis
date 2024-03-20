@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/input'
 import { showToast } from '@/lib/Toast'
 import { ErrorPayload } from '@/typing'
 import { useAppSelector } from '@/redux/store'
+import { SaveIcon } from 'lucide-react'
+import BounceLoader from '@/components/loader/BounceLoader'
 
 
 // utils function -------------------------------------
@@ -36,16 +38,16 @@ function legitMinMax(type: string, value: string | number): any {
 
 
 // linechartfilter component
-interface LineChartFilterProps {
+interface LineChartFilterSettingsProps {
     data_field: LineChartRequest;
     setChartData: (chartData: LineChartResponse[]) => void;
 }
 
 
-const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => {
+const LineChartFilterSettings = ({ data_field, setChartData }: LineChartFilterSettingsProps) => {
 
     const { gisData } = useAppSelector(state => state.gis);
-    const [getChartsFilter, { data: filterData }] = useGetChartsFilterMutation();
+    const [getChartsFilter, { data: filterData, isLoading: filterDataLoading }] = useGetChartsFilterMutation();
     const [createLineChart] = useCreateLineChartMutation();
     const form = useForm<any>();
 
@@ -79,13 +81,13 @@ const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => 
 
             else if (type === "rangeFilters") {
                 if (!newFilter?.range_filters?.find(el => el.key === key)) {
-                   const newObj =  {
+                    const newObj = {
                         data_type: data_type,
                         key: key,
                         gte: newData[`rangeFilters_${key}_${data_type}_gte`] + `${data_type === "date" ? " 00:00:00" : ""}`,
                         lte: newData[`rangeFilters_${key}_${data_type}_lte`] + `${data_type === "date" ? " 00:00:00" : ""}`
                     }
-                    if(newObj.gte && newObj.lte){
+                    if (newObj.gte && newObj.lte) {
                         newFilter["range_filters"].push(newObj)
                     }
                 }
@@ -121,12 +123,13 @@ const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => 
 
 
     return (
-        <div className=''>
+        <div className='overflow-y-scroll'>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                     <div className='flex flex-col gap-5'>
                         <h2 className='text-md font-medium bg-primary-blue-600 p-2 text-white'>Filter</h2>
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
+                        <div className='grid grid-cols-1 gap-5'>
+                            {filterDataLoading && <BounceLoader />}
                             {filterData?.dropdowns && filterData?.dropdowns?.length > 0 && filterData?.dropdowns?.map((el, index) => (
                                 <div key={index} className='grid grid-cols-1 md:grid-cols-2 gap-5'>
                                     <FormField
@@ -134,7 +137,7 @@ const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => 
                                         name={`dropdowns_${el?.key}_${el?.data_type}_value`}
                                         render={({ field }) => (
                                             <FormItem className='xl:pr-5'>
-                                                <FormLabel className='capitalize flex gap-2'>
+                                                <FormLabel className='capitalize flex gap-2 text-white'>
                                                     {el?.key}
                                                     <p className='text-red-500'>*</p>
                                                 </FormLabel>
@@ -159,7 +162,7 @@ const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => 
                                         name={`dropdowns_${el?.key}_${el?.data_type}_operators`}
                                         render={({ field }) => (
                                             <FormItem className='xl:pr-5'>
-                                                <FormLabel className='capitalize flex gap-2'>
+                                                <FormLabel className='capitalize flex gap-2 text-white'>
                                                     {`${el?.key} Operators`}
                                                     <p className='text-red-500'>*</p>
                                                 </FormLabel>
@@ -168,7 +171,7 @@ const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => 
                                                         {...field}
                                                         defaultValue={form.watch(`dropdowns_${el?.key}_${el?.data_type}_operators`)}
                                                         onSelect={(option) => form.setValue(`dropdowns_${el?.key}_${el?.data_type}_operators` || "", option.value)}
-                                                        placeholder={`Select ${el?.key} operators`}
+                                                        placeholder={`Select operator`}
                                                         options={(el?.operators?.length > 0) ? el?.operators : []}
                                                     />
                                                 </FormControl>
@@ -181,9 +184,11 @@ const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => 
 
                         </div>
                     </div>
+
                     <div className='flex flex-col gap-5'>
                         <h2 className='text-md font-medium bg-primary-blue-600 p-2 text-white'>Range Filter</h2>
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
+                        <div className='grid grid-cols-1 gap-5'>
+                            {filterDataLoading && <BounceLoader />}
                             {filterData?.range_filters && filterData?.range_filters?.length > 0 && filterData?.range_filters?.map((el, index) => (
                                 <div key={index} className='grid grid-cols-1 md:grid-cols-2 gap-5'>
                                     <FormField
@@ -191,7 +196,7 @@ const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => 
                                         name={`rangeFilters_${el?.key}_${el?.data_type}_gte`}
                                         render={({ field }) => (
                                             <FormItem className='xl:pr-5'>
-                                                <FormLabel className='capitalize flex gap-2'>
+                                                <FormLabel className='capitalize flex gap-2 text-white'>
                                                     {`${el?.key} from`}
                                                     <p className='text-red-500'>*</p>
                                                 </FormLabel>
@@ -215,7 +220,7 @@ const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => 
                                         name={`rangeFilters_${el?.key}_${el?.data_type}_lte`}
                                         render={({ field }) => (
                                             <FormItem className='xl:pr-5'>
-                                                <FormLabel className='capitalize flex gap-2'>
+                                                <FormLabel className='capitalize flex gap-2 text-white'>
                                                     {`${el?.key} to`}
                                                     <p className='text-red-500'>*</p>
                                                 </FormLabel>
@@ -241,11 +246,13 @@ const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => 
                     </div>
 
 
-                    <div className='flex items-center gap-3 justify-end'>
+                    <div className='flex items-center gap-3 w-full'>
                         <Button
                             type='submit'
+                            className='w-full flex items-center gap-2'
                         >
-                            Save Details
+                            <SaveIcon size={20} />
+                            Save Filter
                         </Button>
                     </div>
                 </form>
@@ -254,5 +261,5 @@ const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => 
     )
 }
 
-export default LineChartFilter
+export default LineChartFilterSettings
 

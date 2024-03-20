@@ -14,23 +14,21 @@ export interface AttributeValueColorConfig {
     attribute: string;
     values: AttributeValue,
     dataType: string;
-    // min?: number | null;
-    // max?: number | null;
-    // mean?: number | null;
-    // st_dev?: number | null;
 }
 
 interface InitialGisData {
     gisData: GisData | null;
     attributeValueConfig: AttributeValueColorConfig | null;
     specificPlot: boolean;
+    gisAttribute: string | null;
 }
 
 
 const initialState: InitialGisData = {
     gisData: null,
     attributeValueConfig: null,
-    specificPlot: false
+    specificPlot: false,
+    gisAttribute: null
 }
 
 export const gisDataSlice = createSlice({
@@ -41,6 +39,10 @@ export const gisDataSlice = createSlice({
             state.gisData = payload;
             state.specificPlot = false;
             localStorage.setItem("selected_gis_file", JSON.stringify(payload));
+        },
+        initGisAttribute: (state, { payload }: PayloadAction<string>) => {
+            state.gisAttribute = payload;
+            localStorage.setItem("selected_gis_attribute", JSON.stringify(payload));
         },
         initSpecificGisFileData: (state, { payload }: PayloadAction<{specificPlot: boolean; gisData:GisData}>) => {
             state.gisData = payload?.gisData;
@@ -57,4 +59,4 @@ export const gisDataSlice = createSlice({
     },
 });
 
-export const { initGisFileData, initSpecificGisFileData, initAttributeColorConfig, removeGisFileData } = gisDataSlice.actions;
+export const { initGisFileData, initSpecificGisFileData, initAttributeColorConfig, removeGisFileData, initGisAttribute } = gisDataSlice.actions;

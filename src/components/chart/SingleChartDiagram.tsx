@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActiveElement, BubbleDataPoint, Chart, ChartData, ChartEvent, ChartTypeRegistry, Point } from "chart.js";
 import { ChartTypeEnum } from "@/enums";
 import ChartWrapper from "@/components/chart/ChartWrapper";
 import { LineChartRequest, LineChartResponse } from "@/redux/features/chart/chartApi";
 import { dummyChartData } from "@/utils/chart/dummyChartData";
 import { useAppSelector } from "@/redux/store";
+import { generateUniqueHexColors } from "@/utils/map/uniqueColorsGenerator";
+import { chartTypeFinder } from "@/utils/chart/chart";
 
 export type ChartType = Chart<keyof ChartTypeRegistry, (number | [number, number] | Point | BubbleDataPoint | null)[], unknown>;
 interface SingleChartDiagramProps {
@@ -15,19 +17,13 @@ interface SingleChartDiagramProps {
     y_title: string;
     chartRef: React.RefObject<HTMLDivElement>;
     dataField: LineChartRequest;
+    chartType: "BAR" | "LINE" | "PIE" | "DOUGHNUT";
 }
 
-const SingleChartDiagram = ({ title, x_title, y_title, chartRef }: SingleChartDiagramProps) => {
+const SingleChartDiagram = ({ title, x_title, y_title, chartRef, chartData, chartType }: SingleChartDiagramProps) => {
     // STATE
     const [chartDataSet, setChartDataSet] = useState<ChartData>(dummyChartData);
-    const [chartType] = useState<ChartTypeEnum>(ChartTypeEnum.BAR);
     const { color } = useAppSelector(state => state.gisSetting);
-    // const form = useForm<any>();
-
-    // const { gisData } = useAppSelector(state => state.gis);
-    // const [createLineChart, { isLoading: createLoading, isSuccess: createLineChartSuccess }] = useCreateLineChartMutation();
-    // const [getUniqueValues, { data: dateOptions }] = useGetAttributeUniqueValueMutation();
-
 
     // utils
     const handleChangeColor = (_: ChartEvent, elements: ActiveElement[], __: ChartType) => {
@@ -42,47 +38,29 @@ const SingleChartDiagram = ({ title, x_title, y_title, chartRef }: SingleChartDi
                 setChartDataSet(newChartData);
             }
         }
-    }
+    };
 
-    // useEffect(() => {
-    //     getUniqueValues({
-    //         collection: "dummy_data",
-    //         attribute: "date",
-    //     })
-    // }, []);
+    // // USE EFFECT
+    useEffect(() => {
+        if (chartData && chartData?.length > 0) {
+            const newDataSet: ChartData = {
+                labels: chartData[0].label?.map((label) => label?.split(" ")[0]) as any,
+                datasets: chartData?.map((data) => {
+                    const color = generateUniqueHexColors(data.data.length);
+                    return {
+                        label: data?.property?.label && data?.property?.label !== "" ? data?.property?.label : "feature " + data.property.feature_id,
+                        data: data.data as any,
+                        backgroundColor: color,
+                        borderColor: color,
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }
+                })
+            }
 
-    // useEffect(() => {
-    //     if (createLineChartSuccess) {
-    //         console.log("success")
-    //         getUniqueValues({
-    //             collection: "dummy_data",
-    //             attribute: "date",
-    //         })
-    //     }
-    // }, [createLineChartSuccess]);
-
-    // // // USE EFFECT
-    // useEffect(() => {
-    //     if (chartData && chartData?.length > 0) {
-    //         const newDataSet: ChartData = {
-    //             labels: chartData[0].label,
-    //             datasets: chartData?.map((data) => {
-    //                 return {
-    //                     label: "x-axis",
-    //                     data: data.data as any,
-    //                     backgroundColor: generateUniqueHexColors(
-    //                         data.data.length
-    //                     ),
-    //                     borderColor: "black",
-    //                     borderWidth: 2,
-    //                 }
-    //             })
-    //         }
-
-    //         setChartDataSet(newDataSet);
-    //         setChartType(chartTypeFinder(ChartTypeEnum.LINE));
-    //     }
-    // }, [chartData]);
+            setChartDataSet(newDataSet);
+        }
+    }, [chartData]);
 
 
 
@@ -130,70 +108,8 @@ const SingleChartDiagram = ({ title, x_title, y_title, chartRef }: SingleChartDi
     return (
         <div className="w-full">
             <div ref={chartRef} className="w-full  gap-20">
-                {/* <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-5 p-5">
-                            <div className='flex item-center'>
-
-                                <div className="flex-1">
-                                    <FormField
-                                        control={form.control}
-                                        name={"from"}
-                                        render={({ field }) => (
-                                            <FormItem className='xl:pr-5'>
-                                                <FormControl>
-                                                    <SelectInput
-                                                        {...field}
-                                                        defaultValue={form.watch("from")}
-                                                        onSelect={(option) => form.setValue("from" || "", option.value)}
-                                                        placeholder='Select From'
-                                                        options={(dateOptions?.unique_values && dateOptions?.unique_values?.length > 0) ? dateOptions?.unique_values?.map(val => ({
-                                                            label: val,
-                                                            value: val
-                                                        })) : []}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-
-                                <div className="flex-1">
-                                    <FormField
-                                        control={form.control}
-                                        name={"to"}
-                                        render={({ field }) => (
-                                            <FormItem className='xl:pr-5'>
-                                                <FormControl>
-                                                    <SelectInput
-                                                        {...field}
-                                                        defaultValue={form.watch("to")}
-                                                        onSelect={(option) => form.setValue("to" || "", option.value)}
-                                                        placeholder='Select to'
-                                                        options={(dateOptions?.unique_values && dateOptions?.unique_values?.length > 0) ? dateOptions?.unique_values?.map(val => ({
-                                                            label: val,
-                                                            value: val
-                                                        })) : []}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                                <Button
-                                    type='submit'
-                                    disabled={createLoading}
-                                >
-                                    {createLoading ? "Getting..." : "Get"}
-                                </Button>
-                            </div>
-
-
-                        </form>
-                    </Form> */}
                 <ChartWrapper
-                    type={chartType}
+                    type={chartTypeFinder(chartType || ChartTypeEnum.LINE)}
                     data={chartDataSet}
                     title={title}
                     legend={true}
