@@ -3,10 +3,8 @@ import PageHeader from '@/components/page/PageHeader';
 import { LineChartRequest, LineChartResponse } from '@/redux/features/chart/chartApi';
 import SingleChartDiagram from '@/components/chart/SingleChartDiagram';
 import { useForm } from 'react-hook-form';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
-import { LineChartCreateCarousel } from '@/components/chart/chartcarousel/LineChartCreateCarousel';
-import LineChartFilter from '@/components/chart/linechart/LineChartFilter';
 import { Settings } from 'lucide-react';
 import SingleChartSetting from './SingleChartSetting';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -19,6 +17,7 @@ const SingleChartPage = () => {
     const location = useLocation();
     const state = location?.state;
     const dataField: LineChartRequest = state?.dataField;
+    const newChartData: LineChartResponse[] = state?.chartData;
     const form = useForm<any>();
     const title = form.watch('title');
     const x_title = form.watch('x_axis_title');
@@ -26,7 +25,10 @@ const SingleChartPage = () => {
     const chartRef = useRef<HTMLDivElement>(null);
     const [showSettings, setShowSettings] = useState<boolean>(false);
 
-
+    useEffect(() => {
+        console.log(chartData)
+        setChartData(newChartData);
+    },[newChartData])
 
     const handleCapture = async (): Promise<string | void> => {
         if (chartRef.current !== null) {

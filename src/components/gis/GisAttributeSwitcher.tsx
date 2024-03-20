@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Check, ChevronsUpDown, ListFilter } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { useGetCollectionAttributeMutation } from "@/redux/features/gis-data/gisApi"
+import { useGetCollectionAttributeMutation, useUpdateGisAttributeKeyMutation } from "@/redux/features/gis-data/gisApi"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { initGisAttribute } from "@/redux/features/gis-data/gisDataSlice"
 import BounceLoader from "../loader/BounceLoader"
@@ -18,16 +18,20 @@ const GisAttributeSwitcher = ({ className }: SwitcherProps) => {
     const [open, setOpen] = useState(false)
     const dispatch = useAppDispatch();
     const { gisAttribute } = useAppSelector(state => state.gis);
+    const [updateGisAttribute] = useUpdateGisAttributeKeyMutation();
+    const { gisData } = useAppSelector(state => state.gis);
 
 
     const onGisAttributeSwitch = (attr: string) => {
+        updateGisAttribute({
+            id: gisData?.id || "",
+            property_label_key: attr
+        })
         dispatch(initGisAttribute(attr))
-
         setOpen(false);
     }
 
     const [getCollectionAttributes, { data: attributes, isLoading: fetchLoading }] = useGetCollectionAttributeMutation();
-    const { gisData } = useAppSelector(state => state.gis);
 
 
     // USEEFFECT

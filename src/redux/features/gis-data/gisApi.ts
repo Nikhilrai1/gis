@@ -82,6 +82,7 @@ export const fetchAttributeWithValues = async (collection: string) => {
 }
 
 
+
 export const gisApi = rootApi.injectEndpoints({
     endpoints: (builder) => ({
         getAllGisFile: builder.query<GisAllFileResponseI, { params: SearchParamsI }>({
@@ -125,6 +126,16 @@ export const gisApi = rootApi.injectEndpoints({
                 url: `/gis-file-upload/${id}/`,
                 method: "PUT",
                 body: data,
+            }),
+            invalidatesTags: ["gis-data"],
+        }),
+        updateGisAttributeKey: builder.mutation<any, { id: string | number; property_label_key: string }>({
+            query: ({ id, property_label_key }) => ({
+                url: `gis-file-upload/${id}/update-property-key/`,
+                method: "PUT",
+                body: {
+                    property_label_key
+                },
             }),
             invalidatesTags: ["gis-data"],
         }),
@@ -189,5 +200,6 @@ export const {
     useGetAttributeUniqueValueMutation,
     useGetGisSpecificGeojsonMutation,
     useGetGisDataPropertiesQuery,
-    useGetGisCustomFilledCustomMutation
+    useGetGisCustomFilledCustomMutation,
+    useUpdateGisAttributeKeyMutation
 } = gisApi;

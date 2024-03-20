@@ -4,9 +4,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { ChipSelectInput, SelectInput } from '@/components/ui/SelectInput'
 import { useAppSelector } from '@/redux/store'
 import { showToast } from '@/lib/Toast'
-import { useGetFormsAndFieldsQuery } from '@/redux/features/chart/chartApi'
+import { useCreateLineChartMutation, useGetFormsAndFieldsQuery } from '@/redux/features/chart/chartApi'
 import { useGetGisDataPropertiesQuery } from '@/redux/features/gis-data/gisApi'
 import { useNavigate } from 'react-router-dom'
+import { ErrorPayload } from '@/typing'
 
 
 const getFormFieldsOptions = (formFields: any) => {
@@ -35,6 +36,7 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
 
     const { formData: formDataOptions, formFieldsData: formFields } = getFormFieldsOptions(formFieldsData);
     const form = useForm<any>();
+    const [createLineChart] = useCreateLineChartMutation();
 
     const { data: features } = useGetGisDataPropertiesQuery({
         id: gisData?.id as string || "",
@@ -48,6 +50,33 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
 
     // 2. Define a submit handler.
     async function onSubmit(data: any) {
+        console.log(data)
+        createLineChart({
+            gis_id: gisData?.id || "",
+            ...data,
+            x_field: data.date_field,
+            y_field: data.value,
+            filters: {
+                dropdowns: [],
+                range_filters: []
+            }
+        }).unwrap().then((chartData) => {
+            showToast("Create Chart Successfully.", { type: "success" });
+            navigate("/chart/single", {
+                state: {
+                    dataField: data,
+                    chartData
+                }
+            });
+        }).catch((err: ErrorPayload) => {
+            console.log(err)
+            err?.data?.errors.map(el => {
+                showToast(el.message, {
+                    type: "error",
+                })
+            })
+        });
+
         if (!data) {
             showToast("Please fill all required fields", { type: "info" })
             return;
