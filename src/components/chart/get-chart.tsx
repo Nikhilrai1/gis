@@ -7,11 +7,33 @@ import { ChartType } from "./ChartDiagram";
 export function getChartComponent(
   type: ChartTypeEnum,
   data: ChartData,
-  option: ChartOptions ,
-  handleChangeColor: (chartEvent: ChartEvent, elements: ActiveElement[], chart: ChartType) => void
+  option: ChartOptions,
+  handleChangeColor: (chartEvent: ChartEvent, elements: ActiveElement[], chart: ChartType) => void,
+  title: {
+    x: string;
+    y: string;
+  }
 ) {
 
+  console.log("title", title);
+
   option.onClick = handleChangeColor;
+  option.scales = {
+    x: {
+      title: {
+        display: true,
+        text: title?.x || "" // Name of y-axis
+      },
+      beginAtZero: true // Optional
+    },
+    y: {
+      title: {
+        display: true,
+        text: title?.y || "" // Name of y-axis
+      },
+      beginAtZero: true // Optional
+    },
+  };
   switch (type) {
     case ChartTypeEnum.BAR:
       return (
@@ -19,7 +41,7 @@ export function getChartComponent(
           options={option as ChartOptions<"bar">}
           width={1000}
           height={325}
-          data={data as ChartData<"bar">}          
+          data={data as ChartData<"bar">}
         />
       );
     case ChartTypeEnum.LINE:

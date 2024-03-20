@@ -24,7 +24,6 @@ const SingleChartDiagram = ({ title, x_title, y_title, chartRef, chartData, char
     // STATE
     const [chartDataSet, setChartDataSet] = useState<ChartData>(dummyChartData);
     const { color } = useAppSelector(state => state.gisSetting);
-
     // utils
     const handleChangeColor = (_: ChartEvent, elements: ActiveElement[], __: ChartType) => {
         if (elements.length > 0) {
@@ -35,10 +34,14 @@ const SingleChartDiagram = ({ title, x_title, y_title, chartRef, chartData, char
             if (newChartData?.datasets && newChartData?.datasets[datasetIndex] && newChartData?.datasets[datasetIndex]?.backgroundColor) {
                 // @ts-ignore
                 newChartData.datasets[datasetIndex].backgroundColor[index] = color;
+                // @ts-ignore
+                newChartData.datasets[datasetIndex].borderColor = color;
+                // @ts-ignore
                 setChartDataSet(newChartData);
             }
         }
     };
+
 
     // // USE EFFECT
     useEffect(() => {

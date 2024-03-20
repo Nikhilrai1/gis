@@ -5,7 +5,7 @@ import SingleChartDiagram from '@/components/chart/SingleChartDiagram';
 import { useForm } from 'react-hook-form';
 import { useEffect, useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
-import { SaveAll, SaveIcon, Settings } from 'lucide-react';
+import { SaveIcon, Settings } from 'lucide-react';
 import SingleChartSetting from './SingleChartSetting';
 import { AnimatePresence, motion } from 'framer-motion';
 import BounceLoader from '@/components/loader/BounceLoader';
@@ -19,10 +19,10 @@ const SingleChartPage = () => {
     const state = location?.state;
     const dataField: LineChartRequest = state?.dataField;
     const newChartData: LineChartResponse[] = state?.chartData;
-    const form = useForm<any>();
-    const title = form.watch('title');
-    const x_title = form.watch('x_axis_title');
-    const y_title = form.watch('y_axis_title');
+    const titleForm = useForm<any>();
+    const title = titleForm.watch('title');
+    const x_title = titleForm.watch('x_axis_title');
+    const y_title = titleForm.watch('y_axis_title');
     const chartRef = useRef<HTMLDivElement>(null);
     const [showSettings, setShowSettings] = useState<boolean>(false);
 
@@ -89,8 +89,7 @@ const SingleChartPage = () => {
                     >
                         <SingleChartSetting
                             dataField={dataField}
-                            form={form}
-                            handleCapture={handleCapture}
+                            titleForm={titleForm}
                             setChartData={setChartData}
                             className='max-w-[450px]'
                             setOpenSettings={setShowSettings}

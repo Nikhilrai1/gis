@@ -66,6 +66,10 @@
   }
 }
 
+.y-title {
+  transform: rotate(-90deg);
+}
+
 @layer base {
   * {
     @apply border-border;
