@@ -94,12 +94,18 @@ const LineChartFilter = ({ data_field, setChartData }: LineChartFilterProps) => 
         })
 
         createLineChart({
+          data: {
             gis_id: gisData?.id || "",
             feature_id: data_field?.feature_id || [],
             form: data_field?.form || "",
             x_field: data_field?.date_field || "",
             y_field: data_field?.value || "",
             filters: newFilter,
+          },
+          params: {
+            page: 1,
+            per_page: 10
+          }
         }).unwrap().then((chartData) => {
             setChartData(chartData);
             showToast("Create Chart Successfully.", { type: "success" });

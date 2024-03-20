@@ -52,10 +52,12 @@ const LineChartFilterSettings = ({ data_field, setChartData }: LineChartFilterSe
     const form = useForm<any>();
 
 
-
     // 2. Define a submit handler.
     async function onSubmit(newData: any) {
         if (!newData) return;
+        const allData = newData?.all_data;
+        const data_per_page = newData?.data_per_chart;
+        const chart_page = newData?.chart_page;
         const newFilter: LineChartFilterType = {
             dropdowns: [],
             range_filters: []
@@ -96,12 +98,18 @@ const LineChartFilterSettings = ({ data_field, setChartData }: LineChartFilterSe
         })
 
         createLineChart({
-            gis_id: gisData?.id || "",
-            feature_id: data_field?.feature_id || [],
-            form: data_field?.form || "",
-            x_field: data_field?.date_field || "",
-            y_field: data_field?.value || "",
-            filters: newFilter,
+            data: {
+                gis_id: gisData?.id || "",
+                feature_id: data_field?.feature_id || [],
+                form: data_field?.form || "",
+                x_field: data_field?.date_field || "",
+                y_field: data_field?.value || "",
+                filters: newFilter,
+            },
+            params: {
+                page: allData ? "all" : chart_page ? chart_page : 1,
+                per_page: data_per_page ? data_per_page : 10
+            }
         }).unwrap().then((chartData) => {
             setChartData(chartData);
             showToast("Create Chart Successfully.", { type: "success" });
@@ -241,6 +249,102 @@ const LineChartFilterSettings = ({ data_field, setChartData }: LineChartFilterSe
                                     />
                                 </div>
                             ))}
+
+                        </div>
+                    </div>
+
+                    <div className='flex flex-col gap-5'>
+                        <h2 className='text-md font-medium bg-primary-blue-600 p-2 text-white'>Advanced Settings</h2>
+                        <div className='grid grid-cols-1 gap-5'>
+                            <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
+                                {/* <FormField
+                                        control={form.control}
+                                        name={`dropdowns_${el?.key}_${el?.data_type}_value`}
+                                        render={({ field }) => (
+                                            <FormItem className='xl:pr-5'>
+                                                <FormLabel className='capitalize flex gap-2 text-white'>
+                                                    {el?.key}
+                                                    <p className='text-red-500'>*</p>
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <SelectInput
+                                                        {...field}
+                                                        defaultValue={form.watch(`dropdowns_${el?.key}_${el?.data_type}_value`)}
+                                                        onSelect={(option) => form.setValue(`dropdowns_${el?.key}_${el?.data_type}_value` || "", option.value)}
+                                                        placeholder={`Select ${el?.key}`}
+                                                        options={(el?.options?.length > 0) ? el?.options?.map((el: any) => ({
+                                                            label: el,
+                                                            value: el
+                                                        })) : []}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    /> */}
+                                <FormField
+                                    control={form.control}
+                                    name={`chart_page`}
+                                    render={({ field }) => (
+                                        <FormItem className='xl:pr-5'>
+                                            <FormLabel className='capitalize flex gap-2 text-white'>
+                                                Chart Page
+                                                {/* <p className='text-red-500'>*</p> */}
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    placeholder={`Chart Page`}
+                                                    className='px-4'
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name={`data_per_chart`}
+                                    render={({ field }) => (
+                                        <FormItem className='xl:pr-5'>
+                                            <FormLabel className='capitalize flex gap-2 text-white'>
+                                                Data Per Chart
+                                                {/* <p className='text-red-500'>*</p> */}
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    placeholder={`Data Per Chart`}
+                                                    className='px-4'
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name={`all_data`}
+                                    render={({ field }) => (
+                                        <FormItem className='xl:pr-5'>
+                                            <FormLabel className='capitalize flex gap-2 text-white'>
+                                                All data
+                                            </FormLabel>
+                                            <FormControl>
+                                                <input
+                                                    {...field}
+                                                    type='checkbox'
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+
+                            </div>
 
                         </div>
                     </div>

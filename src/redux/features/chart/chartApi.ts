@@ -159,9 +159,9 @@ export const chartApi = rootApi.injectEndpoints({
       invalidatesTags: ["chart"],
     }),
 
-    createLineChart: builder.mutation<LineChartResponse[], CreateLineChartRequest>({
-      query: (data) => ({
-        url: `/line-chart/`,
+    createLineChart: builder.mutation<LineChartResponse[], { data: CreateLineChartRequest, params: { page?: string | number; per_page?: string | number } }>({
+      query: ({ data, params }) => ({
+        url: `/line-chart/?page=${params?.page}&per_page=${params?.per_page}`,
         method: "POST",
         body: data,
       }),

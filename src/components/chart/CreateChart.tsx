@@ -51,13 +51,18 @@ const CreateChart = ({ setModalOpen }: CreateChartProps) => {
     // 2. Define a submit handler.
     async function onSubmit(data: any) {
         createLineChart({
-            gis_id: gisData?.id || "",
-            ...data,
-            x_field: data.date_field,
-            y_field: data.value,
-            filters: {
-                dropdowns: [],
-                range_filters: []
+            data: {
+                gis_id: gisData?.id || "",
+                ...data,
+                x_field: data.date_field,
+                y_field: data.value,
+                filters: {
+                    dropdowns: [],
+                    range_filters: []
+                }
+            },
+            params: {
+                page: "all"
             }
         }).unwrap().then((chartData) => {
             showToast("Create Chart Successfully.", { type: "success" });
